@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.14)
 project(rice)
 
 add_library(rice SHARED
-    src/core/application.cpp
+    src/Rice/core/application.cpp
 )
 
 target_include_directories(rice PUBLIC
@@ -10,5 +10,8 @@ target_include_directories(rice PUBLIC
 )
 
 target_link_libraries(rice
-    PRIVATE codebase
+    PRIVATE 
+        codebase
+        EnTT::EnTT
+        spdlog::spdlog
 )

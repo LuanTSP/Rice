@@ -5,9 +5,11 @@ project(rice_project)
 
 # Build vendor dependencies
 add_subdirectory(vendor/codebase)
+add_subdirectory(vendor/entt)
+add_subdirectory(vendor/spdlog)
 
 # build Rice engine
 add_subdirectory(Rice)
 
-# build teste game directory
-add_subdirectory(test)
+# build sandbox game directory
+add_subdirectory(sandbox)

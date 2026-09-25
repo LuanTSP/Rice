@@ -12,7 +12,7 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-./build/test/game
+./build/sandbox/game
 
 if [ $? -ne 0 ]; then
     echo "Problem running game!"

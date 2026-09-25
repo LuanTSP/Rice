@@ -1,0 +1,9 @@
+[submodule "vendor/entt"]
+	path = vendor/entt
+	url = https://github.com/skypjack/entt.git
+[submodule "vendor/codebase"]
+	path = vendor/codebase
+	url = https://github.com/LuanTSP/base.git
+[submodule "vendor/spdlog"]
+	path = vendor/spdlog
+	url = https://github.com/gabime/spdlog.git
