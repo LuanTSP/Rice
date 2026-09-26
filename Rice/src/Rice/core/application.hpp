@@ -33,7 +33,7 @@ namespace Rice
         EventManager m_Events;
         InputManager m_Inputs;
 
-        private:
+    private:
         
         /**
         * @brief Indicates whether the application is currently running.

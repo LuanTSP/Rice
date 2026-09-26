@@ -1,53 +1,58 @@
 #include "eventManager.hpp"
 #include "events.hpp"
 
+
 namespace Rice {
 
-    void EventManager::poll()
-    {
-        SDL_Event event;
+void EventManager::poll()
+{
+    SDL_Event event;
 
-        while (SDL_PollEvent(&event))
-        {
-            processSDLEvent(event);
-        }
+    while (SDL_PollEvent(&event))
+    {
+        processSDLEvent(event);
     }
+}
 
-    void EventManager::processSDLEvent(
-        const SDL_Event& event
-    )
+void EventManager::processSDLEvent(
+    const SDL_Event& event
+)
+{
+    switch (event.type)
     {
-        switch (event.type)
+        case SDL_EVENT_QUIT:
         {
-            case SDL_EVENT_QUIT:
-            {
-                emit(QuitEvent{});
-                break;
-            }
+            emit(QuitEvent{});
+            break;
+        }
 
-            case SDL_EVENT_WINDOW_RESIZED:
-            {
-                emit(WindowResizedEvent{
+        case SDL_EVENT_WINDOW_RESIZED:
+        {
+            emit(
+                WindowResizedEvent{
                     .width = event.window.data1,
                     .height = event.window.data2
-                });
+                }
+            );
 
-                break;
-            }
+            break;
+        }
 
-            case SDL_EVENT_WINDOW_MOVED:
-            {
-                emit(WindowMovedEvent{
+        case SDL_EVENT_WINDOW_MOVED:
+        {
+            emit(
+                WindowMovedEvent{
                     .x = event.window.data1,
                     .y = event.window.data2
-                });
+                }
+            );
 
-                break;
-            }
-
-            default:
-                break;
+            break;
         }
-    }
 
-} // namespace Engine
+        default:
+            break;
+    }
+}
+
+} // namespace Rice
