@@ -3,6 +3,7 @@ project(rice)
 
 add_library(rice SHARED
     src/Rice/core/application.cpp
+    src/Rice/core/log.cpp
 )
 
 target_include_directories(rice PUBLIC

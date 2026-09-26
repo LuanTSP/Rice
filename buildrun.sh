@@ -5,7 +5,7 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-cmake --build build
+cmake --build build -j$(nproc)
 
 if [ $? -ne 0 ]; then
     echo "Problem building project!"
