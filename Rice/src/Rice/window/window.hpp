@@ -4,14 +4,23 @@
 
 namespace RICE_INTERNAL
 {
-    class I_Window
-    {        
-        virtual int getWidth()  = 0;
-        virtual int getHeight() = 0;
-        virtual std::string getTitle()  = 0;
-        virtual bool isVSync()  = 0;
+    class Window
+    {
+    public:
+        virtual ~Window() = default;
 
-        virtual void setTitle(const std::string& title) = 0;
-        virtual void setVSync(bool enabled) = 0;
+        virtual void CreateWindow(
+            const std::string& title,
+            int width,
+            int height
+        ) = 0;
+
+        virtual int GetWidth() const = 0;
+        virtual int GetHeight() const = 0;
+        virtual std::string GetTitle() const = 0;
+        virtual bool IsVSync() const = 0;
+
+        virtual void SetTitle(const std::string& title) = 0;
+        virtual void SetVSync(bool enabled) = 0;
     };
 }

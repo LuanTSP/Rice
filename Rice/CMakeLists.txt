@@ -18,7 +18,7 @@ add_library(rice SHARED
     src/Rice/scene/sceneManager.cpp
 
     # Window
-
+    src/Rice/window/glWindow.cpp
 )
 
 target_include_directories(rice PUBLIC

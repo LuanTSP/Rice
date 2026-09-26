@@ -2,6 +2,9 @@
 
 #include "../input/inputManager.hpp"
 #include "../event/eventManager.hpp"
+#include "../window/window.hpp"
+
+#include <memory>
 
 namespace Rice
 {
@@ -17,9 +20,22 @@ namespace Rice
     public:
 
         /**
-        * @brief Constructs an Application instance.
+        * @brief Constructs an Application instance with default OpenGL backend
+        * @param title: std::string (title of the window)
+        * @param width: int (width of the window)
+        * @param height: int (height the window)
+        * @param backend: std::string ("opengl" | "vulkan")
         */
-        Application();
+        Application(const std::string title, int width, int height);
+
+        /**
+        * @brief Constructs an Application instance with specified backend
+        * @param title: std::string (title of the window)
+        * @param width: int (width of the window)
+        * @param height: int (height the window)
+        * @param backend: std::string ("opengl" | "vulkan")
+        */
+        Application(const std::string title, int width, int height, const std::string& backend);
 
         /**
         * @brief Destroys the Application instance.
@@ -39,6 +55,9 @@ namespace Rice
         * @brief Indicates whether the application is currently running.
         */
         bool m_IsRunning = false;
+        std::string m_Backend = "opengl";
+
+        std::unique_ptr<RICE_INTERNAL::Window> m_Window = nullptr;
         
         // Quit the application
         void Quit();
