@@ -7,4 +7,6 @@ add_executable(game
 
 target_link_libraries(game PRIVATE
     rice
+    glad # TEMP
+    SDL3::SDL3 # TEMP
 )

@@ -2,8 +2,23 @@ cmake_minimum_required(VERSION 3.14)
 project(rice)
 
 add_library(rice SHARED
+    # Core
     src/Rice/core/application.cpp
     src/Rice/core/log.cpp
+
+    # Event
+    src/Rice/event/eventManager.cpp
+    
+    # Input
+    src/Rice/input/inputManager.cpp
+    
+    
+    # Scene
+    src/Rice/scene/scene.cpp
+    src/Rice/scene/sceneManager.cpp
+
+    # Window
+
 )
 
 target_include_directories(rice PUBLIC
@@ -15,4 +30,6 @@ target_link_libraries(rice
         codebase
         EnTT::EnTT
         spdlog::spdlog
+        SDL3::SDL3
+        glad
 )
