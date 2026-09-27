@@ -22,5 +22,6 @@ namespace RICE_INTERNAL
 
         virtual void SetTitle(const std::string& title) = 0;
         virtual void SetVSync(bool enabled) = 0;
+        virtual void SwapBuffers() = 0;
     };
 }

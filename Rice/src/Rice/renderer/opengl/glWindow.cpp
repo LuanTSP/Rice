@@ -1,9 +1,11 @@
-#include "Rice/window/glWindow.hpp"
+#include "glWindow.hpp"
+#include "Rice/core/log.hpp"
+#include "Rice/renderer/opengl/openGLContext.hpp"
+
 #include "SDL3/SDL_video.h"
 #include <SDL3/SDL.h>
 #include <glad/glad.h>
 #include <stdexcept>
-#include "../core/log.hpp"
 
 namespace RICE_INTERNAL
 {
@@ -13,10 +15,12 @@ namespace RICE_INTERNAL
         int height
     )
     {
+        // Set varialbles
         m_Title = title;
         m_Width = width;
         m_Height = height;
 
+        // Try to init SDL3
         if (!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS))
         {
             std::string msg = "Failed to init SDL: ";
@@ -25,6 +29,7 @@ namespace RICE_INTERNAL
             throw std::runtime_error(msg);
         }
 
+        // Set SDL version
         SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
         SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 6);
         SDL_GL_SetAttribute(
@@ -33,6 +38,7 @@ namespace RICE_INTERNAL
         );
         SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 
+        // Create SDL window handle
         m_Window = SDL_CreateWindow(
             m_Title.c_str(),
             m_Width,
@@ -40,6 +46,7 @@ namespace RICE_INTERNAL
             SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE
         );
 
+        // Check if window handle creation was ok
         if (!m_Window)
         {
             std::string msg = "Failed to create window: ";
@@ -48,9 +55,12 @@ namespace RICE_INTERNAL
             throw std::runtime_error(msg);
         }
 
-        m_Context = SDL_GL_CreateContext(m_Window);
+        m_OpenGLRenderContext = new OpenGLRenderContext(m_Window);
 
-        if (!m_Context)
+        // Set context as the OpenGLRenderContext
+        m_OpenGLRenderContext->Init();
+
+        if (!m_OpenGLRenderContext)
         {
             std::string msg = "Failed creating OpenGL context: ";
             msg += SDL_GetError();
@@ -63,14 +73,13 @@ namespace RICE_INTERNAL
             throw std::runtime_error(msg);
         }
 
-        if (!gladLoadGLLoader(
-            (GLADloadproc)SDL_GL_GetProcAddress))
+        if (!gladLoadGLLoader((GLADloadproc)SDL_GL_GetProcAddress))
         {
             std::string msg = "Failed initializing GLAD: ";
             msg += SDL_GetError();
             Rice::Log::Error(msg);
 
-            SDL_GL_DestroyContext(m_Context);
+            delete m_OpenGLRenderContext;
             SDL_DestroyWindow(m_Window);
             SDL_Quit();
 
@@ -121,5 +130,10 @@ namespace RICE_INTERNAL
     {
         m_Vsync = enabled;
         SDL_GL_SetSwapInterval(0);
+    }
+
+    void glWindow::SwapBuffers()
+    {
+        SDL_GL_SwapWindow(m_Window);
     }
 }

@@ -9,7 +9,7 @@
 #include <utility>
 #include <vector>
 
-namespace Rice {
+namespace RICE_INTERNAL {
 
 class EventManager
 {

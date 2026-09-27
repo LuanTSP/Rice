@@ -1,6 +1,6 @@
 #include "inputManager.hpp"
 
-namespace Rice {
+namespace RICE_INTERNAL {
 
     InputManager::InputManager()
     {
@@ -70,14 +70,14 @@ namespace Rice {
             m_MouseY - m_PreviousMouseY;
     }
 
-    bool InputManager::isKeyDown(Key key) const
+    bool InputManager::isKeyDown(Rice::Key key) const
     {
         const SDL_Scancode scancode = toSDL(key);
 
         return m_CurrentKeys[scancode];
     }
 
-    bool InputManager::isKeyPressed(Key key) const
+    bool InputManager::isKeyPressed(Rice::Key key) const
     {
         const SDL_Scancode scancode = toSDL(key);
 
@@ -86,7 +86,7 @@ namespace Rice {
             !m_PreviousKeys[scancode];
     }
 
-    bool InputManager::isKeyReleased(Key key) const
+    bool InputManager::isKeyReleased(Rice::Key key) const
     {
         const SDL_Scancode scancode = toSDL(key);
 
@@ -96,14 +96,14 @@ namespace Rice {
     }
 
     bool InputManager::isMouseButtonDown(
-        MouseButton button
+        Rice::MouseButton button
     ) const
     {
         return m_CurrentMouse[mouseIndex(button)];
     }
 
     bool InputManager::isMouseButtonPressed(
-        MouseButton button
+        Rice::MouseButton button
     ) const
     {
         const int index = mouseIndex(button);
@@ -114,7 +114,7 @@ namespace Rice {
     }
 
     bool InputManager::isMouseButtonReleased(
-        MouseButton button
+        Rice::MouseButton button
     ) const
     {
         const int index = mouseIndex(button);
@@ -144,85 +144,85 @@ namespace Rice {
         return m_MouseDeltaY;
     }
 
-    int InputManager::mouseIndex(MouseButton button)
+    int InputManager::mouseIndex(Rice::MouseButton button)
     {
         switch (button)
         {
-            case MouseButton::Left:
+            case Rice::MouseButton::Left:
                 return 0;
 
-            case MouseButton::Middle:
+            case Rice::MouseButton::Middle:
                 return 1;
 
-            case MouseButton::Right:
+            case Rice::MouseButton::Right:
                 return 2;
         }
 
         return 0;
     }
 
-    SDL_Scancode InputManager::toSDL(Key key)
+    SDL_Scancode InputManager::toSDL(Rice::Key key)
     {
         switch (key)
         {
-            case Key::A: return SDL_SCANCODE_A;
-            case Key::B: return SDL_SCANCODE_B;
-            case Key::C: return SDL_SCANCODE_C;
-            case Key::D: return SDL_SCANCODE_D;
-            case Key::E: return SDL_SCANCODE_E;
-            case Key::F: return SDL_SCANCODE_F;
-            case Key::G: return SDL_SCANCODE_G;
-            case Key::H: return SDL_SCANCODE_H;
-            case Key::I: return SDL_SCANCODE_I;
-            case Key::J: return SDL_SCANCODE_J;
-            case Key::K: return SDL_SCANCODE_K;
-            case Key::L: return SDL_SCANCODE_L;
-            case Key::M: return SDL_SCANCODE_M;
-            case Key::N: return SDL_SCANCODE_N;
-            case Key::O: return SDL_SCANCODE_O;
-            case Key::P: return SDL_SCANCODE_P;
-            case Key::Q: return SDL_SCANCODE_Q;
-            case Key::R: return SDL_SCANCODE_R;
-            case Key::S: return SDL_SCANCODE_S;
-            case Key::T: return SDL_SCANCODE_T;
-            case Key::U: return SDL_SCANCODE_U;
-            case Key::V: return SDL_SCANCODE_V;
-            case Key::W: return SDL_SCANCODE_W;
-            case Key::X: return SDL_SCANCODE_X;
-            case Key::Y: return SDL_SCANCODE_Y;
-            case Key::Z: return SDL_SCANCODE_Z;
+            case Rice::Key::A: return SDL_SCANCODE_A;
+            case Rice::Key::B: return SDL_SCANCODE_B;
+            case Rice::Key::C: return SDL_SCANCODE_C;
+            case Rice::Key::D: return SDL_SCANCODE_D;
+            case Rice::Key::E: return SDL_SCANCODE_E;
+            case Rice::Key::F: return SDL_SCANCODE_F;
+            case Rice::Key::G: return SDL_SCANCODE_G;
+            case Rice::Key::H: return SDL_SCANCODE_H;
+            case Rice::Key::I: return SDL_SCANCODE_I;
+            case Rice::Key::J: return SDL_SCANCODE_J;
+            case Rice::Key::K: return SDL_SCANCODE_K;
+            case Rice::Key::L: return SDL_SCANCODE_L;
+            case Rice::Key::M: return SDL_SCANCODE_M;
+            case Rice::Key::N: return SDL_SCANCODE_N;
+            case Rice::Key::O: return SDL_SCANCODE_O;
+            case Rice::Key::P: return SDL_SCANCODE_P;
+            case Rice::Key::Q: return SDL_SCANCODE_Q;
+            case Rice::Key::R: return SDL_SCANCODE_R;
+            case Rice::Key::S: return SDL_SCANCODE_S;
+            case Rice::Key::T: return SDL_SCANCODE_T;
+            case Rice::Key::U: return SDL_SCANCODE_U;
+            case Rice::Key::V: return SDL_SCANCODE_V;
+            case Rice::Key::W: return SDL_SCANCODE_W;
+            case Rice::Key::X: return SDL_SCANCODE_X;
+            case Rice::Key::Y: return SDL_SCANCODE_Y;
+            case Rice::Key::Z: return SDL_SCANCODE_Z;
 
-            case Key::Escape:
+            case Rice::Key::Escape:
                 return SDL_SCANCODE_ESCAPE;
 
-            case Key::Enter:
+            case Rice::Key::Enter:
                 return SDL_SCANCODE_RETURN;
 
-            case Key::Space:
+            case Rice::Key::Space:
                 return SDL_SCANCODE_SPACE;
 
-            case Key::Tab:
+            case Rice::Key::Tab:
                 return SDL_SCANCODE_TAB;
 
-            case Key::Left:
+            case Rice::Key::Left:
                 return SDL_SCANCODE_LEFT;
 
-            case Key::Right:
+            case Rice::Key::Right:
                 return SDL_SCANCODE_RIGHT;
 
-            case Key::Up:
+            case Rice::Key::Up:
                 return SDL_SCANCODE_UP;
 
-            case Key::Down:
+            case Rice::Key::Down:
                 return SDL_SCANCODE_DOWN;
 
-            case Key::Shift:
+            case Rice::Key::Shift:
                 return SDL_SCANCODE_LSHIFT;
 
-            case Key::Ctrl:
+            case Rice::Key::Ctrl:
                 return SDL_SCANCODE_LCTRL;
 
-            case Key::Alt:
+            case Rice::Key::Alt:
                 return SDL_SCANCODE_LALT;
 
             default:

@@ -32,6 +32,9 @@ namespace Rice {
         Middle,
         Right
     };
+}
+
+namespace RICE_INTERNAL {
 
     class InputManager
     {
@@ -49,13 +52,13 @@ namespace Rice {
             */
             void update();
 
-            bool isKeyDown(Key key) const;
-            bool isKeyPressed(Key key) const;
-            bool isKeyReleased(Key key) const;
+            bool isKeyDown(Rice::Key key) const;
+            bool isKeyPressed(Rice::Key key) const;
+            bool isKeyReleased(Rice::Key key) const;
 
-            bool isMouseButtonDown(MouseButton button) const;
-            bool isMouseButtonPressed(MouseButton button) const;
-            bool isMouseButtonReleased(MouseButton button) const;
+            bool isMouseButtonDown(Rice::MouseButton button) const;
+            bool isMouseButtonPressed(Rice::MouseButton button) const;
+            bool isMouseButtonReleased(Rice::MouseButton button) const;
 
             float mouseX() const;
             float mouseY() const;
@@ -64,8 +67,8 @@ namespace Rice {
             float mouseDeltaY() const;
 
         private:
-            static SDL_Scancode toSDL(Key key);
-            static int mouseIndex(MouseButton button);
+            static SDL_Scancode toSDL(Rice::Key key);
+            static int mouseIndex(Rice::MouseButton button);
 
             bool m_CurrentKeys[SDL_SCANCODE_COUNT]{};
             bool m_PreviousKeys[SDL_SCANCODE_COUNT]{};

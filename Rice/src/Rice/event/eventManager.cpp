@@ -2,7 +2,7 @@
 #include "events.hpp"
 
 
-namespace Rice {
+namespace RICE_INTERNAL {
 
 void EventManager::poll()
 {
@@ -22,14 +22,14 @@ void EventManager::processSDLEvent(
     {
         case SDL_EVENT_QUIT:
         {
-            emit(QuitEvent{});
+            emit(Rice::QuitEvent{});
             break;
         }
 
         case SDL_EVENT_WINDOW_RESIZED:
         {
             emit(
-                WindowResizedEvent{
+                Rice::WindowResizedEvent{
                     .width = event.window.data1,
                     .height = event.window.data2
                 }
@@ -41,7 +41,7 @@ void EventManager::processSDLEvent(
         case SDL_EVENT_WINDOW_MOVED:
         {
             emit(
-                WindowMovedEvent{
+                Rice::WindowMovedEvent{
                     .x = event.window.data1,
                     .y = event.window.data2
                 }

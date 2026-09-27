@@ -1,8 +1,8 @@
 #pragma once
 
-#include "../input/inputManager.hpp"
-#include "../event/eventManager.hpp"
-#include "../window/window.hpp"
+#include "Rice/input/inputManager.hpp"
+#include "Rice/event/eventManager.hpp"
+#include "Rice/renderer/window.hpp"
 
 #include <memory>
 
@@ -17,50 +17,50 @@ namespace Rice
     */
     class Application
     {
-    public:
+        public:
 
-        /**
-        * @brief Constructs an Application instance with default OpenGL backend
-        * @param title: std::string (title of the window)
-        * @param width: int (width of the window)
-        * @param height: int (height the window)
-        * @param backend: std::string ("opengl" | "vulkan")
-        */
-        Application(const std::string title, int width, int height);
+            /**
+            * @brief Constructs an Application instance with default OpenGL backend
+            * @param title: std::string (title of the window)
+            * @param width: int (width of the window)
+            * @param height: int (height the window)
+            * @param backend: std::string ("opengl" | "vulkan")
+            */
+            Application(const std::string title, int width, int height);
 
-        /**
-        * @brief Constructs an Application instance with specified backend
-        * @param title: std::string (title of the window)
-        * @param width: int (width of the window)
-        * @param height: int (height the window)
-        * @param backend: std::string ("opengl" | "vulkan")
-        */
-        Application(const std::string title, int width, int height, const std::string& backend);
+            /**
+            * @brief Constructs an Application instance with specified backend
+            * @param title: std::string (title of the window)
+            * @param width: int (width of the window)
+            * @param height: int (height the window)
+            * @param backend: std::string ("opengl" | "vulkan")
+            */
+            Application(const std::string title, int width, int height, const std::string& backend);
 
-        /**
-        * @brief Destroys the Application instance.
-        */
-        ~Application() = default;
+            /**
+            * @brief Destroys the Application instance.
+            */
+            ~Application() = default;
 
-        /**
-        * @brief Starts the application's main loop.
-        */
-        void Run();
-        EventManager m_Events;
-        InputManager m_Inputs;
+            /**
+            * @brief Starts the application's main loop.
+            */
+            void Run();
+            
+        private:
+            std::unique_ptr<RICE_INTERNAL::EventManager> m_Events = nullptr;
+            std::unique_ptr<RICE_INTERNAL::InputManager> m_Inputs = nullptr;
+            std::unique_ptr<RICE_INTERNAL::Window> m_Window = nullptr;
+            
+            /**
+            * @brief Indicates whether the application is currently running.
+            */
+            bool m_IsRunning = false;
+            std::string m_Backend = "opengl";
 
-    private:
-        
-        /**
-        * @brief Indicates whether the application is currently running.
-        */
-        bool m_IsRunning = false;
-        std::string m_Backend = "opengl";
-
-        std::unique_ptr<RICE_INTERNAL::Window> m_Window = nullptr;
-        
-        // Quit the application
-        void Quit();
+            
+            // Quit the application
+            void Quit();
     };
 
 }

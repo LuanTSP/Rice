@@ -1,7 +1,8 @@
 #pragma once
 
 #include "SDL3/SDL_video.h"
-#include "window.hpp"
+#include "Rice/renderer/window.hpp"
+#include "Rice/renderer/opengl/openGLContext.hpp"
 #include <string>
 #include <SDL3/SDL.h>
 
@@ -43,13 +44,16 @@ namespace RICE_INTERNAL
             // @param enabled: bool (if vsync is enabled)
             void SetVSync(bool enabled) override;
 
+            // Swap buffers
+            void SwapBuffers() override;
+
         private:
             SDL_Window* m_Window = nullptr;
-            SDL_GLContext m_Context;
-            int m_Width = 600;
-            int m_Height = 400;
+            OpenGLRenderContext* m_OpenGLRenderContext = nullptr;
+            int m_Width;
+            int m_Height;
             bool m_Vsync = true;
-            std::string m_Title = "Window";
+            std::string m_Title;
 
     };
 }
