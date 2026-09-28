@@ -20,6 +20,7 @@ add_library(rice SHARED
     # Renderer
     src/Rice/renderer/opengl/glWindow.cpp
     src/Rice/renderer/opengl/openGLContext.cpp
+    src/Rice/renderer/opengl/openGLShader.cpp
 )
 
 target_include_directories(rice PUBLIC

@@ -5,8 +5,12 @@
 #include "Rice/event/events.hpp"
 #include "log.hpp"
 
+#include <charconv>
 #include <memory>
 #include <stdexcept>
+
+#include <glad/glad.h> // TODO: Remove dependency
+#include "Rice/renderer/opengl/openGLShader.hpp"
 
 namespace Rice {
     Application::Application(const std::string title, int width, int height)
@@ -86,16 +90,85 @@ namespace Rice {
 
     void Application::Run()
     {
-        Log::Info("Application running...");
+        Log::Info("Application running..."); // DEBUG
+        
+        // DEBUG
+        unsigned int VertexArray, VertexBuffer, IndexBuffer;
+
+        // 1. Create vertex array buffer
+        glGenVertexArrays(1, &VertexArray);
+        glBindVertexArray(VertexArray);
+
+        // 2. Create vertex buffer
+        glGenBuffers(1, &VertexBuffer);
+        glBindBuffer(GL_ARRAY_BUFFER, VertexBuffer);
+
+        // 2.1 Send vertex data to the GPU
+        float vertices[3 * 3] = {
+            -0.5f, -0.5f, 0.0f,
+            0.5f, -0.5f, 0.0f,
+            0.0f, 0.5f, 0.0f
+        };
+
+        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+        
+        // 2.2 Describe the layout of the data that wat sent into GPU memory
+        glEnableVertexAttribArray(0);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE,  3 * sizeof(float), nullptr);
+
+        // 3. Create and bind index buffer
+        glGenBuffers(1, &IndexBuffer);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IndexBuffer);
+
+        // 3.1 Send index data into GPU
+        int index[3] = {0, 1, 2};
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(index), index, GL_STATIC_DRAW);
+
+        // 4. Shader
+        std::string vertSrc = R"(
+            #version 460 core
+            layout (location = 0) in vec3 aPos;
+
+            out vec3 v_Pos;
+
+            void main()
+            {
+                v_Pos = aPos;
+                gl_Position = vec4(aPos, 1.0);
+            }
+        )";
+
+        std::string fragSrc = R"(
+            #version 460 core
+
+            in vec3 v_Pos;
+            out vec4 FragColor;
+
+            void main()
+            {
+                FragColor = vec4(v_Pos * 0.5 + 0.5, 0.0);
+            }
+        )";
+
+        auto myShader = RICE_INTERNAL::OpenGLShader(vertSrc, fragSrc);
         
         m_IsRunning = true;
         while (m_IsRunning)
         {
             m_Events->poll();
             m_Inputs->update();
+
+            // DEBUG
+            glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+            glBindVertexArray(VertexArray);
+            myShader.Bind();
+            glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, nullptr);
+            m_Window->SwapBuffers();
+            myShader.Unbind();
         }
         
-        Log::Info("Application ended.");
+        Log::Info("Application ended."); // DEBUG
     }
 
     void Application::Quit()
