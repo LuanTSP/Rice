@@ -1,17 +1,17 @@
-#include "openGLContext.hpp"
+#include "glContext.hpp"
 
 namespace RICE_INTERNAL
 {
-    OpenGLRenderContext::OpenGLRenderContext(SDL_Window* handle)
+    GLRenderContext::GLRenderContext(SDL_Window* handle)
         : m_Handle(handle)
     {}
 
-    OpenGLRenderContext::~OpenGLRenderContext()
+    GLRenderContext::~GLRenderContext()
     {
         SDL_GL_DestroyContext(m_GLContext);
     }
 
-    void OpenGLRenderContext::Init()
+    void GLRenderContext::Init()
     {
         m_GLContext = SDL_GL_CreateContext(m_Handle);
     }

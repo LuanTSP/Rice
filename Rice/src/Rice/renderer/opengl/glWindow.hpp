@@ -2,7 +2,7 @@
 
 #include "SDL3/SDL_video.h"
 #include "Rice/renderer/window.hpp"
-#include "Rice/renderer/opengl/openGLContext.hpp"
+#include "Rice/renderer/opengl/glContext.hpp"
 #include <string>
 #include <SDL3/SDL.h>
 
@@ -49,7 +49,7 @@ namespace RICE_INTERNAL
 
         private:
             SDL_Window* m_Window = nullptr;
-            OpenGLRenderContext* m_OpenGLRenderContext = nullptr;
+            GLRenderContext* m_GLRenderContext = nullptr;
             int m_Width;
             int m_Height;
             bool m_Vsync = true;

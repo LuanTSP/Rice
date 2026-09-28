@@ -1,15 +1,14 @@
 #pragma once
 
-#include <cstdint>
 #include <string>
 
 namespace RICE_INTERNAL
 {
-    class OpenGLShader
+    class GLShader
     {
         public:
-            OpenGLShader(const std::string& vertSrc, const std::string& fragSrc);
-            ~OpenGLShader();
+            GLShader(const std::string& vertSrc, const std::string& fragSrc);
+            ~GLShader();
 
             void Bind();
             void Unbind();

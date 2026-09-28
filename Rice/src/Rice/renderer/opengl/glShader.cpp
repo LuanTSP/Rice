@@ -1,11 +1,11 @@
-#include "openGLShader.hpp"
+#include "glShader.hpp"
 #include "Rice/core/log.hpp"
 #include <glad/glad.h>
 #include <vector>
 
 namespace RICE_INTERNAL
 {
-    OpenGLShader::OpenGLShader(const std::string& vertSrc, const std::string& fragSrc)
+    GLShader::GLShader(const std::string& vertSrc, const std::string& fragSrc)
     {
         // Create an empty vertex shader handle
         GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
@@ -120,17 +120,17 @@ namespace RICE_INTERNAL
         glDetachShader(m_ProgramID, fragmentShader);
     };
 
-    OpenGLShader::~OpenGLShader()
+    GLShader::~GLShader()
     {
         glDeleteProgram(m_ProgramID);
     }
 
-    void OpenGLShader::Bind()
+    void GLShader::Bind()
     {
         glUseProgram(m_ProgramID);
     };
 
-    void OpenGLShader::Unbind()
+    void GLShader::Unbind()
     {
         glUseProgram(0);
     }

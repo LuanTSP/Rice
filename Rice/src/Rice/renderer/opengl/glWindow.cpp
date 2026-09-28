@@ -1,6 +1,6 @@
 #include "glWindow.hpp"
 #include "Rice/core/log.hpp"
-#include "Rice/renderer/opengl/openGLContext.hpp"
+#include "Rice/renderer/opengl/glContext.hpp"
 
 #include "SDL3/SDL_video.h"
 #include <SDL3/SDL.h>
@@ -55,12 +55,12 @@ namespace RICE_INTERNAL
             throw std::runtime_error(msg);
         }
 
-        m_OpenGLRenderContext = new OpenGLRenderContext(m_Window);
+        m_GLRenderContext = new GLRenderContext(m_Window);
 
-        // Set context as the OpenGLRenderContext
-        m_OpenGLRenderContext->Init();
+        // Set context as the GLRenderContext
+        m_GLRenderContext->Init();
 
-        if (!m_OpenGLRenderContext)
+        if (m_GLRenderContext == nullptr)
         {
             std::string msg = "Failed creating OpenGL context: ";
             msg += SDL_GetError();
@@ -79,7 +79,7 @@ namespace RICE_INTERNAL
             msg += SDL_GetError();
             Rice::Log::Error(msg);
 
-            delete m_OpenGLRenderContext;
+            delete m_GLRenderContext;
             SDL_DestroyWindow(m_Window);
             SDL_Quit();
 

@@ -7,11 +7,11 @@
 
 namespace RICE_INTERNAL
 {
-    class OpenGLRenderContext : public RenderContext
+    class GLRenderContext : public RenderContext
     {
         public:
-            OpenGLRenderContext(SDL_Window* handle);
-            ~OpenGLRenderContext();
+            GLRenderContext(SDL_Window* handle);
+            ~GLRenderContext();
             void Init() override;
 
         private:

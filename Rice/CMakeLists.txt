@@ -19,8 +19,14 @@ add_library(rice SHARED
 
     # Renderer
     src/Rice/renderer/opengl/glWindow.cpp
-    src/Rice/renderer/opengl/openGLContext.cpp
-    src/Rice/renderer/opengl/openGLShader.cpp
+    src/Rice/renderer/opengl/glContext.cpp
+    src/Rice/renderer/opengl/glShader.cpp
+    src/Rice/renderer/renderer.cpp
+    src/Rice/renderer/renderer.cpp
+    src/Rice/renderer/vertexBuffer.cpp
+    src/Rice/renderer/opengl/glVertexBuffer.cpp
+    src/Rice/renderer/indexBuffer.cpp
+    src/Rice/renderer/opengl/glIndexBuffer.cpp
 )
 
 target_include_directories(rice PUBLIC
