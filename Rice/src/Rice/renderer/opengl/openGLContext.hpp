@@ -13,7 +13,6 @@ namespace RICE_INTERNAL
             OpenGLRenderContext(SDL_Window* handle);
             ~OpenGLRenderContext();
             void Init() override;
-            void SwapBuffers() override;
 
         private:
             SDL_Window* m_Handle = nullptr;

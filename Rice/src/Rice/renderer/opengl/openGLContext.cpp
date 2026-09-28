@@ -15,9 +15,4 @@ namespace RICE_INTERNAL
     {
         m_GLContext = SDL_GL_CreateContext(m_Handle);
     }
-
-    void OpenGLRenderContext::SwapBuffers()
-    {
-        
-    }
 }
