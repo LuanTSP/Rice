@@ -8,7 +8,7 @@
 
 namespace RICE_INTERNAL
 {
-    class glWindow : public Window
+    class glWindow : public Rice::Window
     {
         public:
             glWindow() = default;

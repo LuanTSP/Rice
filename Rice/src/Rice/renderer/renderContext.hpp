@@ -1,6 +1,6 @@
 #pragma once
 
-namespace RICE_INTERNAL
+namespace Rice
 {
     class RenderContext
     {

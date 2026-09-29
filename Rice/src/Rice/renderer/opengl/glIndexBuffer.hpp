@@ -4,7 +4,7 @@
 
 namespace RICE_INTERNAL
 {
-    class glIndexBuffer : public IndexBuffer
+    class glIndexBuffer : public Rice::IndexBuffer
     {
         public:
             glIndexBuffer(uint32_t* indices, uint32_t size);

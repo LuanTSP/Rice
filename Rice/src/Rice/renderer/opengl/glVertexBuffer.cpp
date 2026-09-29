@@ -12,10 +12,7 @@ namespace RICE_INTERNAL
         // Bind it
         glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
         // Pass data
-        glBufferData(GL_ARRAY_BUFFER, size, vertices, GL_STATIC_DRAW);
-        // Layout TODO: REMOVE LAYOUT FROM HERE
-        glEnableVertexAttribArray(0);
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE,  3 * sizeof(float), nullptr);
+        glBufferData(GL_ARRAY_BUFFER, size, vertices, GL_STATIC_DRAW);        
         // Unbind
         glBindBuffer(GL_ARRAY_BUFFER, 0);
 

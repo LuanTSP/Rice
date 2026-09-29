@@ -50,7 +50,7 @@ namespace Rice
         private:
             std::unique_ptr<RICE_INTERNAL::EventManager> m_Events = nullptr;
             std::unique_ptr<RICE_INTERNAL::InputManager> m_Inputs = nullptr;
-            std::unique_ptr<RICE_INTERNAL::Window> m_Window = nullptr;
+            std::unique_ptr<Rice::Window> m_Window = nullptr;
             
             /**
             * @brief Indicates whether the application is currently running.

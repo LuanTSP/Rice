@@ -1,6 +1,6 @@
 #include "renderer.hpp"
 
-namespace RICE_INTERNAL
+namespace Rice
 {
     GraphicsBackend Renderer::m_GraphicsBackend = GraphicsBackend::None;
 }

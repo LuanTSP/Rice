@@ -2,7 +2,7 @@
 #include <cstdint>
 
 
-namespace RICE_INTERNAL
+namespace Rice
 {
     class IndexBuffer
     {

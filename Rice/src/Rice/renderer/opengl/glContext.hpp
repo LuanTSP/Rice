@@ -7,7 +7,7 @@
 
 namespace RICE_INTERNAL
 {
-    class GLRenderContext : public RenderContext
+    class GLRenderContext : public Rice::RenderContext
     {
         public:
             GLRenderContext(SDL_Window* handle);

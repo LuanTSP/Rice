@@ -7,7 +7,7 @@
 #include <stdexcept>
 
 
-namespace RICE_INTERNAL
+namespace Rice
 {
     // Selects the correct vertex buffer based on the rendering platform
     // For now returns glVertexBuffer*
@@ -26,7 +26,7 @@ namespace RICE_INTERNAL
             
             case GraphicsBackend::OpenGL:
             {
-                return new glVertexBuffer(vertices, size);
+                return new RICE_INTERNAL::glVertexBuffer(vertices, size);
             }
         }
 

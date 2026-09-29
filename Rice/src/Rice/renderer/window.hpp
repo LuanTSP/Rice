@@ -2,7 +2,7 @@
 
 #include <string>
 
-namespace RICE_INTERNAL
+namespace Rice
 {
     class Window
     {

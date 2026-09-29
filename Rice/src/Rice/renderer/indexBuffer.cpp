@@ -6,7 +6,7 @@
 #include <cstdint>
 #include <stdexcept>
 
-namespace RICE_INTERNAL
+namespace Rice
 {
     // Selects the correct Index buffer based on the rendering platform
     // For now returns glIndexBuffer*
@@ -25,7 +25,7 @@ namespace RICE_INTERNAL
             
             case GraphicsBackend::OpenGL:
             {
-                return new glIndexBuffer(indices, size);
+                return new RICE_INTERNAL::glIndexBuffer(indices, size);
             }
         }
 
