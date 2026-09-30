@@ -1,34 +1,27 @@
 #include "glVertexArray.hpp"
+#include "Rice/renderer/opengl/glVertexBuffer.hpp"
+#include "Rice/renderer/vertexBuffer.hpp"
+#include <cstdint>
 #include <memory>
 #include <glad/glad.h>
 
 namespace RICE_INTERNAL
 {
-    static GLenum ShaderDataTypeToOpenGLBaseType(Rice::ShaderDataType type)
+    static GLenum ShaderDataTypeToOpenGLBaseType(Rice::ShaderDataCategory category)
     {
-        switch (type) {
-            case Rice::ShaderDataType::Float:
-            case Rice::ShaderDataType::Float2:
-            case Rice::ShaderDataType::Float3:
-            case Rice::ShaderDataType::Float4:
-            case Rice::ShaderDataType::Mat2:
-            case Rice::ShaderDataType::Mat3:
-            case Rice::ShaderDataType::Mat4:
+        switch (category) {
+            case Rice::ShaderDataCategory::Float:
                 return GL_FLOAT;
 
-            case Rice::ShaderDataType::Int:
-            case Rice::ShaderDataType::Int2:
-            case Rice::ShaderDataType::Int3:
-            case Rice::ShaderDataType::Int4:
+            case Rice::ShaderDataCategory::Integer:
                 return GL_INT;
 
-            case Rice::ShaderDataType::Bool:
-                return GL_BOOL;
+            case Rice::ShaderDataCategory::Boolean:
+                Rice::Log::Error("Boolean vertex attributes are not supported by OpenGL");
+                throw std::runtime_error("Boolean vertex attributes are not supported by OpenGL");
         }
 
-        std::string msg = "Invalid ShaderDataType";
-        Rice::Log::Error(msg);
-        throw std::runtime_error(msg);
+        throw std::runtime_error("Invalid ShaderDataCategory");
     }
 
     glVertexArray::glVertexArray() 
@@ -54,21 +47,48 @@ namespace RICE_INTERNAL
 
     void glVertexArray::AddVertexBuffer(const std::shared_ptr<Rice::VertexBuffer>& buffer)
     {
+        auto buff = std::dynamic_pointer_cast<glVertexBuffer>(buffer);
+
         glBindVertexArray(m_ID);
         buffer->Bind();
 
-        const auto& layout = buffer->GetLayout();
-        uint32_t index = 0;
-        for (auto& e : layout)
+        uint32_t attributeIndex = 0;
+        uint32_t elementIndex = 0;
+        for (auto& type : buff->GetShaderDataTypes())
         {
-            glEnableVertexAttribArray(index);
-            glVertexAttribPointer(index, 
-                e.GetComponentCount(), 
-                ShaderDataTypeToOpenGLBaseType(e.Type), 
-                e.Normalized ? GL_TRUE : GL_FALSE , 
-                layout.GetStride(), 
-                reinterpret_cast<const void*>(static_cast<std::uintptr_t>(e.Offset)));
-            index++;
+            const Rice::ShaderDataTypeInfo info = Rice::GetShaderDataTypeInfo(type);
+            const GLenum baseType = ShaderDataTypeToOpenGLBaseType(info.category);
+            const uintptr_t elementOffset = buff->GetOffsets()[elementIndex++];
+            const uint32_t columnSize = info.sizeBytes / info.attributeCount;
+
+            for (uint32_t column = 0; column < info.attributeCount; ++column)
+            {
+                const uint32_t location = attributeIndex + column;
+                const uintptr_t offset = elementOffset + column * columnSize;
+
+                glEnableVertexAttribArray(location);
+                if (info.category == Rice::ShaderDataCategory::Integer)
+                {
+                    glVertexAttribIPointer(
+                        location,
+                        info.componentCount,
+                        baseType,
+                        buff->GetStride(),
+                        reinterpret_cast<const void*>(offset));
+                }
+                else
+                {
+                    glVertexAttribPointer(
+                        location,
+                        info.componentCount,
+                        baseType,
+                        GL_FALSE,
+                        buff->GetStride(),
+                        reinterpret_cast<const void*>(offset));
+                }
+            }
+
+            attributeIndex += info.attributeCount;
         }
 
         m_VertexBuffers.push_back(buffer);

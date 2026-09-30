@@ -9,7 +9,9 @@
 #include "Rice/renderer/opengl/glShader.hpp"
 #include "Rice/renderer/vertexBuffer.hpp"
 
+#include <cstdint>
 #include <memory>
+#include <vector>
 
 namespace Rice
 {
@@ -30,11 +32,16 @@ namespace Rice
             // Window (TODO:: Make it a window manager)
             std::unique_ptr<Rice::Window> m_Window = nullptr;
 
-            // TODO: remove from here
-            std::shared_ptr<RICE_INTERNAL::GLShader> m_Shader;
-            std::shared_ptr<VertexBuffer> m_VertexBuffer;
-            std::shared_ptr<IndexBuffer> m_IndexBuffer;
-            std::shared_ptr<VertexArray> m_VertexArray;
+            struct RenderObject
+            {
+                std::shared_ptr<RICE_INTERNAL::GLShader> shader;
+                std::shared_ptr<VertexBuffer> vertexBuffer;
+                std::shared_ptr<IndexBuffer> indexBuffer;
+                std::shared_ptr<VertexArray> vertexArray;
+                std::uint32_t indexCount = 0;
+            };
+
+            std::vector<RenderObject> m_RenderObjects;
 
             // Private variables
             bool m_IsRunning = false;

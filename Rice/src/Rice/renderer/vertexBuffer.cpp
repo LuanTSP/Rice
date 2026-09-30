@@ -3,6 +3,7 @@
 #include "Rice/renderer/opengl/glVertexBuffer.hpp"
 #include "Rice/core/log.hpp"
 
+#include <initializer_list>
 #include <string>
 #include <stdexcept>
 
@@ -13,7 +14,7 @@ namespace Rice
     // For now returns glVertexBuffer*
     // @param vertices  : float*    (pointer to vertex float array)
     // @param size      : uint32_t  (size of the vertez array in bytes)
-    VertexBuffer* VertexBuffer::Create(float *vertices, uint32_t size)
+    VertexBuffer* VertexBuffer::Create(float *vertices, uint32_t size, const std::initializer_list<std::tuple<ShaderDataType, std::string>>& layout)
     {
         switch (Renderer::GetGraphicsBackend()) 
         {
@@ -26,7 +27,7 @@ namespace Rice
             
             case GraphicsBackend::OpenGL:
             {
-                return new RICE_INTERNAL::glVertexBuffer(vertices, size);
+                return new RICE_INTERNAL::glVertexBuffer(vertices, size, layout);
             }
         }
 
