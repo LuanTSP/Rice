@@ -1,9 +1,7 @@
 #include "glVertexBuffer.hpp"
 #include "Rice/core/log.hpp"
 #include "Rice/renderer/vertexBuffer.hpp"
-#include <cstdint>
 #include <glad/glad.h>
-#include <initializer_list>
 
 namespace RICE_INTERNAL
 {

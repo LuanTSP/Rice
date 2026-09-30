@@ -1,6 +1,5 @@
 #include "glIndexBuffer.hpp"
 #include "Rice/core/log.hpp"
-#include <cstdint>
 #include <glad/glad.h>
 
 namespace RICE_INTERNAL

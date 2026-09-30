@@ -3,10 +3,6 @@
 #include "Rice/renderer/opengl/glVertexBuffer.hpp"
 #include "Rice/core/log.hpp"
 
-#include <initializer_list>
-#include <string>
-#include <stdexcept>
-
 
 namespace Rice
 {

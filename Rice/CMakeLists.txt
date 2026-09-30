@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.14)
+cmake_minimum_required(VERSION 3.16)
 project(rice)
 
 add_library(rice SHARED
@@ -29,6 +29,10 @@ add_library(rice SHARED
     src/Rice/renderer/opengl/glIndexBuffer.cpp
     src/Rice/renderer/vertexArray.cpp
     src/Rice/renderer/opengl/glVertexArray.cpp
+)
+
+target_precompile_headers(rice
+    PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src/pch.hpp
 )
 
 target_include_directories(rice PUBLIC

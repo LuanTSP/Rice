@@ -9,17 +9,14 @@
 #include "log.hpp"
 
 #include <GLES2/gl2.h>
-#include <cstdint>
 #include <glad/glad.h>
-#include <memory>
-#include <stdexcept>
-#include <utility>
+
 
 
 
 namespace Rice 
 {
-    Application::Application(const std::string title, int width, int height)
+    Application::Application(const std::string& title, int width, int height)
     {
         // 1. Initialize logging
         Log::Init();

@@ -1,7 +1,6 @@
 #include "glShader.hpp"
 #include "Rice/core/log.hpp"
 #include <glad/glad.h>
-#include <vector>
 
 namespace RICE_INTERNAL
 {

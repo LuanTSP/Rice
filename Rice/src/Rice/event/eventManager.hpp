@@ -6,9 +6,6 @@
 #include <functional>
 #include <typeindex>
 #include <unordered_map>
-#include <utility>
-#include <vector>
-
 namespace RICE_INTERNAL {
 
 class EventManager

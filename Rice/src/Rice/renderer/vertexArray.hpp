@@ -1,8 +1,10 @@
 #pragma once
 
+#include <memory>
+
 #include "Rice/renderer/indexBuffer.hpp"
 #include "Rice/renderer/vertexBuffer.hpp"
-#include <memory>
+
 namespace Rice
 {
     class VertexArray

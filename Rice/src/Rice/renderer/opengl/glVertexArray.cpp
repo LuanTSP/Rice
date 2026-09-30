@@ -1,8 +1,6 @@
 #include "glVertexArray.hpp"
 #include "Rice/renderer/opengl/glVertexBuffer.hpp"
 #include "Rice/renderer/vertexBuffer.hpp"
-#include <cstdint>
-#include <memory>
 #include <glad/glad.h>
 
 namespace RICE_INTERNAL

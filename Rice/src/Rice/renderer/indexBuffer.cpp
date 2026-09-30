@@ -3,9 +3,6 @@
 #include "Rice/renderer/opengl/glIndexBuffer.hpp"
 #include "Rice/renderer/renderer.hpp"
 
-#include <cstdint>
-#include <stdexcept>
-
 namespace Rice
 {
     // Selects the correct Index buffer based on the rendering platform

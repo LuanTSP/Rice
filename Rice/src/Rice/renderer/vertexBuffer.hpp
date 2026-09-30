@@ -1,8 +1,11 @@
 #pragma once
+
 #include <cstdint>
+#include <initializer_list>
 #include <stdexcept>
 #include <string>
 #include <tuple>
+
 #include "Rice/core/log.hpp"
 
 

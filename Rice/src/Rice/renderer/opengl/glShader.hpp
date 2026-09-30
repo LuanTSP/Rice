@@ -1,7 +1,5 @@
 #pragma once
 
-#include <string>
-
 namespace RICE_INTERNAL
 {
     class GLShader

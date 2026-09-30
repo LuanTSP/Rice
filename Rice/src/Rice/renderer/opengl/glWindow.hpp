@@ -3,7 +3,6 @@
 #include "SDL3/SDL_video.h"
 #include "Rice/renderer/window.hpp"
 #include "Rice/renderer/opengl/glContext.hpp"
-#include <string>
 #include <SDL3/SDL.h>
 
 namespace RICE_INTERNAL

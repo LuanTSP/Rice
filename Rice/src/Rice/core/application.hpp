@@ -9,16 +9,12 @@
 #include "Rice/renderer/opengl/glShader.hpp"
 #include "Rice/renderer/vertexBuffer.hpp"
 
-#include <cstdint>
-#include <memory>
-#include <vector>
-
 namespace Rice
 {
     class Application
     {
         public:
-            Application(const std::string title, int width, int height);
+            Application(const std::string& title, int width, int height);
 
             ~Application() = default;
 

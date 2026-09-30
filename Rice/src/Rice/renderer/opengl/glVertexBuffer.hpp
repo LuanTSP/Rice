@@ -1,8 +1,5 @@
 #pragma once
 #include "Rice/renderer/vertexBuffer.hpp"
-#include <cstdint>
-#include <initializer_list>
-#include <vector>
 
 namespace RICE_INTERNAL
 {

@@ -5,7 +5,6 @@
 #include "SDL3/SDL_video.h"
 #include <SDL3/SDL.h>
 #include <glad/glad.h>
-#include <stdexcept>
 
 namespace RICE_INTERNAL
 {

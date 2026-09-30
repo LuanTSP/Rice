@@ -3,8 +3,6 @@
 #include "Rice/renderer/indexBuffer.hpp"
 #include "Rice/renderer/vertexBuffer.hpp"
 #include "Rice/renderer/vertexArray.hpp"
-#include <memory>
-#include <vector>
 
 namespace RICE_INTERNAL
 {
