@@ -2,6 +2,6 @@
 
 int main()
 {
-    auto app = Rice::Application("My Window", 600, 400, "opengl");
+    auto app = Rice::Application("My Window", 600, 400);
     app.Run();
 }

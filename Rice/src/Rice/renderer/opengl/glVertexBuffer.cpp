@@ -22,9 +22,11 @@ namespace RICE_INTERNAL
     void glVertexBuffer::Bind()
     {
         if (m_Created == true)
+        {
             glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
             return;
-        
+        }
+
         Rice::Log::Error("Tried to bind an non created glVertexBuffer");
     }
 

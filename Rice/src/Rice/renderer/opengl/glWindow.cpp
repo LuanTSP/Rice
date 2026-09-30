@@ -129,7 +129,7 @@ namespace RICE_INTERNAL
     void glWindow::SetVSync(bool enabled)
     {
         m_Vsync = enabled;
-        SDL_GL_SetSwapInterval(0);
+        SDL_GL_SetSwapInterval(enabled ? 1 : 0);
     }
 
     void glWindow::SwapBuffers()

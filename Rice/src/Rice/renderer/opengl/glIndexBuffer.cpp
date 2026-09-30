@@ -22,9 +22,11 @@ namespace RICE_INTERNAL
     void glIndexBuffer::Bind()
     {
         if (m_Created == true)
+        {
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IBO);
             return;
-        
+        }
+
         Rice::Log::Error("Tried to bind an non created glIndexBuffer");
     }
 

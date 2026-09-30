@@ -27,6 +27,8 @@ add_library(rice SHARED
     src/Rice/renderer/opengl/glVertexBuffer.cpp
     src/Rice/renderer/indexBuffer.cpp
     src/Rice/renderer/opengl/glIndexBuffer.cpp
+    src/Rice/renderer/vertexArray.cpp
+    src/Rice/renderer/opengl/glVertexArray.cpp
 )
 
 target_include_directories(rice PUBLIC
