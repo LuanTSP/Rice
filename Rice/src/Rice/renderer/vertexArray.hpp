@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cstdint>
 #include <memory>
 
 #include "Rice/renderer/indexBuffer.hpp"
@@ -15,6 +16,8 @@ namespace Rice
 
             virtual void AddVertexBuffer(const std::shared_ptr<Rice::VertexBuffer>& buffer) = 0;
             virtual void SetIndexBuffer(const std::shared_ptr<Rice::IndexBuffer>& buffer) = 0;
+
+            virtual uint32_t GetElementCount() = 0;
 
             static VertexArray* Create();
     };

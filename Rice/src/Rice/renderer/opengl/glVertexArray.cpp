@@ -1,6 +1,7 @@
 #include "glVertexArray.hpp"
 #include "Rice/renderer/opengl/glVertexBuffer.hpp"
 #include "Rice/renderer/vertexBuffer.hpp"
+#include <cstdint>
 #include <glad/glad.h>
 
 namespace RICE_INTERNAL
@@ -97,5 +98,10 @@ namespace RICE_INTERNAL
         buffer->Bind();
 
         m_IndexBuffer = buffer;
+    }
+
+    uint32_t glVertexArray::GetElementCount()
+    {
+        return m_IndexBuffer->GetCount();
     }
 }

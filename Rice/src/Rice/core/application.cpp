@@ -1,15 +1,19 @@
 #include "application.hpp"
 #include "Rice/event/eventManager.hpp"
 #include "Rice/input/inputManager.hpp"
+#include "Rice/renderer/indexBuffer.hpp"
 #include "Rice/renderer/opengl/glShader.hpp"
 #include "Rice/renderer/opengl/glWindow.hpp"
 #include "Rice/event/events.hpp"
 #include "Rice/renderer/vertexArray.hpp"
 #include "Rice/renderer/renderer.hpp"
+#include "Rice/renderer/vertexBuffer.hpp"
+#include "glm/ext/vector_float4.hpp"
 #include "log.hpp"
 
 #include <GLES2/gl2.h>
 #include <glad/glad.h>
+#include <memory>
 
 
 
@@ -22,7 +26,6 @@ namespace Rice
         Log::Init();
 
         // 2. Initialize window with OpenGL backend TODO: switch the backend implementation automatically
-        Rice::Renderer::SetGraphicsBackend(Rice::GraphicsBackend::OpenGL);
         m_Window = std::make_unique<RICE_INTERNAL::glWindow>();
 
         if (!m_Window)
@@ -95,36 +98,7 @@ namespace Rice
             }
         )";
 
-        auto addRenderObject = [this](
-            float* vertices,
-            std::uint32_t vertexBufferSize,
-            std::uint32_t* indices,
-            std::uint32_t indexCount,
-            const std::string& vertexShader,
-            const std::string& fragmentShader)
-        {
-            RenderObject object;
-            object.vertexArray.reset(Rice::VertexArray::Create());
-            object.vertexBuffer.reset(Rice::VertexBuffer::Create(
-                vertices,
-                vertexBufferSize,
-                {
-                    { ShaderDataType::Float3, "a_Position" },
-                    { ShaderDataType::Float4, "a_Color" }
-                }
-            ));
-
-            object.indexBuffer.reset(Rice::IndexBuffer::Create(
-                indices,
-                static_cast<std::uint32_t>(sizeof(std::uint32_t) * indexCount)
-            ));
-
-            object.vertexArray->AddVertexBuffer(object.vertexBuffer);
-            object.vertexArray->SetIndexBuffer(object.indexBuffer);
-            object.shader = std::make_shared<RICE_INTERNAL::GLShader>(vertexShader, fragmentShader);
-            object.indexCount = indexCount;
-            m_RenderObjects.push_back(std::move(object));
-        };
+        m_Renderer = std::make_shared<Rice::Renderer>();
 
         std::uint32_t firstIndices[] = {0, 1, 2};
         float firstVertices[] = {
@@ -141,22 +115,38 @@ namespace Rice
             -0.30f, 0.30f, 0.0f, 1.0f, 0.8f, 0.1f, 1.0f
         };
 
-        addRenderObject(
-            firstVertices,
-            static_cast<std::uint32_t>(sizeof(firstVertices)),
-            firstIndices,
-            static_cast<std::uint32_t>(std::size(firstIndices)),
-            firstVertexShader,
-            firstFragmentShader
-        );
-        addRenderObject(
-            secondVertices,
-            static_cast<std::uint32_t>(sizeof(secondVertices)),
-            secondIndices,
-            static_cast<std::uint32_t>(std::size(secondIndices)),
-            secondVertexShader,
-            secondFragmentShader
-        );
+        m_VertexBuffer1.reset(Rice::VertexBuffer::Create(
+            firstVertices, 
+            sizeof(firstVertices), 
+            {
+                { Rice::ShaderDataType::Float3, "aPos" },
+                { Rice::ShaderDataType::Float4, "aColor" }
+            }
+        ));
+
+        m_VertexBuffer2.reset(Rice::VertexBuffer::Create(
+            secondVertices, 
+            sizeof(secondVertices), 
+            {
+                { Rice::ShaderDataType::Float3, "aPos" },
+                { Rice::ShaderDataType::Float4, "aColor" }
+            }
+        ));
+
+        m_IndexBuffer1.reset(Rice::IndexBuffer::Create(firstIndices, sizeof(firstIndices)));
+        m_IndexBuffer2.reset(Rice::IndexBuffer::Create(secondIndices, sizeof(secondIndices)));
+
+        m_Shader1 = std::make_shared<RICE_INTERNAL::GLShader>(firstVertexShader, firstFragmentShader);
+        m_Shader2 = std::make_shared<RICE_INTERNAL::GLShader>(secondVertexShader, secondFragmentShader);
+
+        m_VertexArray1.reset(Rice::VertexArray::Create());
+        m_VertexArray2.reset(Rice::VertexArray::Create());
+
+        m_VertexArray1->AddVertexBuffer(m_VertexBuffer1);
+        m_VertexArray2->AddVertexBuffer(m_VertexBuffer2);
+
+        m_VertexArray1->SetIndexBuffer(m_IndexBuffer1);
+        m_VertexArray2->SetIndexBuffer(m_IndexBuffer2);
 
         Log::Info("Application initialized");
     }
@@ -171,20 +161,21 @@ namespace Rice
             m_Events->poll();
             m_Inputs->update();
 
-            glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-            for (const auto& object : m_RenderObjects)
-            {
-                object.vertexArray->Bind();
-                object.shader->Bind();
-                glDrawElements(
-                    GL_TRIANGLES,
-                    static_cast<GLsizei>(object.indexCount),
-                    GL_UNSIGNED_INT,
-                    nullptr
-                );
-                object.shader->Unbind();
-            }
+            auto clearColor = glm::vec4(0.1, 0.1, 0.1, 1.0f);
+
+            m_Renderer->BeginScene();
+
+            m_Renderer->SetClearColor(clearColor);
+            m_Renderer->Clear();
+            
+            // Draw
+            m_Shader1->Bind();
+            m_Renderer->Submit(m_VertexArray1);
+            
+            m_Shader2->Bind();
+            m_Renderer->Submit(m_VertexArray2);
+
+            m_Renderer->EndScene();
 
             m_Window->SwapBuffers();
         }

@@ -1,5 +1,6 @@
 #include "glIndexBuffer.hpp"
 #include "Rice/core/log.hpp"
+#include <cstdint>
 #include <glad/glad.h>
 
 namespace RICE_INTERNAL
@@ -14,6 +15,9 @@ namespace RICE_INTERNAL
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, indices, GL_STATIC_DRAW);
         // Unbind
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+        // Update count
+        m_Count = size / sizeof(uint32_t);
 
         m_Created = true;
     }
@@ -32,5 +36,10 @@ namespace RICE_INTERNAL
     void glIndexBuffer::Unbind()
     {
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    }
+
+    uint32_t glIndexBuffer::GetCount()
+    {
+        return m_Count;
     }
 }

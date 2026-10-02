@@ -2,12 +2,14 @@
 
 #include "Rice/input/inputManager.hpp"
 #include "Rice/event/eventManager.hpp"
+#include "Rice/renderer/renderer.hpp"
 #include "Rice/renderer/vertexArray.hpp"
 #include "Rice/renderer/window.hpp"
 
 #include "Rice/renderer/indexBuffer.hpp"
 #include "Rice/renderer/opengl/glShader.hpp"
 #include "Rice/renderer/vertexBuffer.hpp"
+#include <memory>
 
 namespace Rice
 {
@@ -28,16 +30,20 @@ namespace Rice
             // Window (TODO:: Make it a window manager)
             std::unique_ptr<Rice::Window> m_Window = nullptr;
 
-            struct RenderObject
-            {
-                std::shared_ptr<RICE_INTERNAL::GLShader> shader;
-                std::shared_ptr<VertexBuffer> vertexBuffer;
-                std::shared_ptr<IndexBuffer> indexBuffer;
-                std::shared_ptr<VertexArray> vertexArray;
-                std::uint32_t indexCount = 0;
-            };
+            
+            std::shared_ptr<RICE_INTERNAL::GLShader> m_Shader1;
+            std::shared_ptr<RICE_INTERNAL::GLShader> m_Shader2;
 
-            std::vector<RenderObject> m_RenderObjects;
+            std::shared_ptr<VertexBuffer> m_VertexBuffer1;
+            std::shared_ptr<VertexBuffer> m_VertexBuffer2;
+
+            std::shared_ptr<IndexBuffer> m_IndexBuffer1;
+            std::shared_ptr<IndexBuffer> m_IndexBuffer2;
+
+            std::shared_ptr<VertexArray> m_VertexArray1;
+            std::shared_ptr<VertexArray> m_VertexArray2;
+
+            std::shared_ptr<Renderer> m_Renderer;
 
             // Private variables
             bool m_IsRunning = false;

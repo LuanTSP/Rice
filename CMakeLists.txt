@@ -11,10 +11,10 @@ set(SDL_X11 OFF)
 set(SDL_WAYLAND ON)
 
 # Build vendor dependencies dirs with CMake
-add_subdirectory(vendor/codebase)
 add_subdirectory(vendor/entt)
 add_subdirectory(vendor/spdlog)
 add_subdirectory(vendor/SDL)
+add_subdirectory(vendor/glm)
 
 # Build glad as a shared lib
 add_library(glad SHARED vendor/glad/src/glad.c)
