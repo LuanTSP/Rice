@@ -1,12 +1,13 @@
 #pragma once
 
+#include "Rice/core/log.hpp"
+
 #include <cstdint>
 #include <initializer_list>
 #include <stdexcept>
 #include <string>
 #include <tuple>
 
-#include "Rice/core/log.hpp"
 
 
 namespace Rice

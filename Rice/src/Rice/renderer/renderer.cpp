@@ -1,23 +1,29 @@
 #include "renderer.hpp"
 #include "Rice/renderer/opengl/glRendererCommand.hpp"
+#include "Rice/renderer/rendererCommand.hpp"
 #include <memory>
 
 
 namespace Rice
 {
-    Rice::GraphicsBackend Renderer::m_GraphicsBackend = Rice::GraphicsBackend::OpenGL;
+    Rice::GraphicsBackend Renderer::m_GraphicsBackend = Rice::GraphicsBackend::None;
+    std::shared_ptr<RendererCommand> Renderer::m_RendererCommand = nullptr;
 
-    Renderer::Renderer()
+    void Renderer::Init(const Rice::GraphicsBackend backend)
     {
-        switch (m_GraphicsBackend) {
+        switch (backend) {
             case Rice::GraphicsBackend::None:
             {
                 m_RendererCommand = nullptr;
+                m_GraphicsBackend = backend;
+                break;
             }
 
             case Rice::GraphicsBackend::OpenGL:
             {
                 m_RendererCommand = std::make_shared<RICE_INTERNAL::glRendererCommand>();
+                m_GraphicsBackend = backend;
+                break;
             }
         }
     }
@@ -38,4 +44,6 @@ namespace Rice
     {
         m_RendererCommand->Clear();
     }
+
+    GraphicsBackend Renderer::GetGraphicsBackend() { return m_GraphicsBackend; }
 }

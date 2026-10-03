@@ -11,12 +11,7 @@
 #include "glm/ext/vector_float4.hpp"
 #include "log.hpp"
 
-#include <GLES2/gl2.h>
-#include <glad/glad.h>
 #include <memory>
-
-
-
 
 namespace Rice 
 {
@@ -24,6 +19,7 @@ namespace Rice
     {
         // 1. Initialize logging
         Log::Init();
+        Renderer::Init(Rice::GraphicsBackend::OpenGL);
 
         // 2. Initialize window with OpenGL backend TODO: switch the backend implementation automatically
         m_Window = std::make_unique<RICE_INTERNAL::glWindow>();
@@ -98,8 +94,6 @@ namespace Rice
             }
         )";
 
-        m_Renderer = std::make_shared<Rice::Renderer>();
-
         std::uint32_t firstIndices[] = {0, 1, 2};
         float firstVertices[] = {
             -0.90f, -0.55f, 0.0f, 1.0f, 0.1f, 0.1f, 1.0f,
@@ -163,19 +157,17 @@ namespace Rice
 
             auto clearColor = glm::vec4(0.1, 0.1, 0.1, 1.0f);
 
-            m_Renderer->BeginScene();
-
-            m_Renderer->SetClearColor(clearColor);
-            m_Renderer->Clear();
+            Renderer::SetClearColor(clearColor);
+            Renderer::Clear();
             
             // Draw
             m_Shader1->Bind();
-            m_Renderer->Submit(m_VertexArray1);
+            Renderer::Submit(m_VertexArray1);
             
             m_Shader2->Bind();
-            m_Renderer->Submit(m_VertexArray2);
+            Renderer::Submit(m_VertexArray2);
 
-            m_Renderer->EndScene();
+            Renderer::EndScene();
 
             m_Window->SwapBuffers();
         }

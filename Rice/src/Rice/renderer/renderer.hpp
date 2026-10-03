@@ -20,18 +20,18 @@ namespace Rice
     class Renderer
     {
         public:
-            Renderer();
+            static void Init(const Rice::GraphicsBackend backend);
 
-            void BeginScene();
-            void EndScene();
-            void Submit(const std::shared_ptr<Rice::VertexArray>& vertexArray);
-            void SetClearColor(const glm::vec4& color);
-            void Clear();
+            static void BeginScene();
+            static void EndScene();
+            static void Submit(const std::shared_ptr<Rice::VertexArray>& vertexArray);
+            static void SetClearColor(const glm::vec4& color);
+            static void Clear();
             
-            static GraphicsBackend GetGraphicsBackend() { return m_GraphicsBackend; }
+            static GraphicsBackend GetGraphicsBackend();
 
         private:
             static GraphicsBackend m_GraphicsBackend;
-            std::shared_ptr<RendererCommand> m_RendererCommand;
+            static std::shared_ptr<RendererCommand> m_RendererCommand;
     };
 }

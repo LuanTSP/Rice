@@ -2,7 +2,6 @@
 
 #include "Rice/input/inputManager.hpp"
 #include "Rice/event/eventManager.hpp"
-#include "Rice/renderer/renderer.hpp"
 #include "Rice/renderer/vertexArray.hpp"
 #include "Rice/renderer/window.hpp"
 
@@ -42,8 +41,6 @@ namespace Rice
 
             std::shared_ptr<VertexArray> m_VertexArray1;
             std::shared_ptr<VertexArray> m_VertexArray2;
-
-            std::shared_ptr<Renderer> m_Renderer;
 
             // Private variables
             bool m_IsRunning = false;
