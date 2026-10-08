@@ -1,6 +1,6 @@
 #include "application.hpp"
 #include "Rice/event/eventManager.hpp"
-#include "Rice/input/inputManager.hpp"
+#include "Rice/input/input.hpp"
 #include "Rice/renderer/opengl/glWindow.hpp"
 #include "Rice/event/events.hpp"
 #include "Rice/renderer/renderer.hpp"
@@ -28,7 +28,6 @@ namespace Rice
         m_Window->CreateWindow(title, width, height);
 
         // 3. Initialize managers
-        m_Inputs = std::make_unique<RICE_INTERNAL::InputManager>();
         m_Events = std::make_unique<RICE_INTERNAL::EventManager>();
 
         // 3.1 Subscribe to Quit event (not a must but is good)
@@ -44,7 +43,7 @@ namespace Rice
         while (m_IsRunning)
         {
             m_Events->poll();
-            m_Inputs->update();
+            Rice::Input::BeginFrame();
 
             if (m_ActiveScene)
             {

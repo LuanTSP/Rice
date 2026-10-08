@@ -1,4 +1,6 @@
+#include "Rice/input/input.hpp"
 #include <Rice.hpp>
+#include <glm/ext/vector_float3.hpp>
 #include <memory>
 
 class ExampleScene : public Rice::Scene
@@ -120,6 +122,27 @@ public:
     void onUpdate() override
     {
         // Input
+        if (Rice::Input::IsKeyDown(Rice::Key::W))
+        {
+            m_CameraPosition.y += m_CameraSpeed;
+            m_Camera->SetPosition(m_CameraPosition);
+        }
+        if (Rice::Input::IsKeyDown(Rice::Key::A))
+        {
+            m_CameraPosition.x -= m_CameraSpeed;
+            m_Camera->SetPosition(m_CameraPosition);
+        }
+        if (Rice::Input::IsKeyDown(Rice::Key::S))
+        {
+            m_CameraPosition.y -= m_CameraSpeed;
+            m_Camera->SetPosition(m_CameraPosition);
+        }
+        if (Rice::Input::IsKeyDown(Rice::Key::D))
+        {
+            m_CameraPosition.x += m_CameraSpeed;
+            m_Camera->SetPosition(m_CameraPosition);
+        }
+        
 
         // Draw to screen
         auto clearColor = glm::vec4(0.1, 0.1, 0.1, 1.0f);
@@ -141,6 +164,9 @@ private:
     std::shared_ptr<Rice::VertexArray> m_VertexArray1;
     std::shared_ptr<Rice::VertexArray> m_VertexArray2;
     std::shared_ptr<Rice::OrthoCamera> m_Camera;
+
+    glm::vec3 m_CameraPosition = glm::vec3(0.0f, 0.0f, 0.0f);
+    float m_CameraSpeed = 0.02f;
 };
 
 int main()

@@ -10,7 +10,7 @@ add_library(rice SHARED
     src/Rice/event/eventManager.cpp
     
     # Input
-    src/Rice/input/inputManager.cpp
+    src/Rice/input/input.cpp
     
     
     # Scene

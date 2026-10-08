@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Rice/input/inputManager.hpp"
 #include "Rice/event/eventManager.hpp"
 #include "Rice/renderer/window.hpp"
 #include "Rice/scene/scene.hpp"
@@ -37,7 +36,6 @@ namespace Rice
         private:
             // Managers
             std::unique_ptr<RICE_INTERNAL::EventManager> m_Events = nullptr;
-            std::unique_ptr<RICE_INTERNAL::InputManager> m_Inputs = nullptr;
             
             // Window (TODO:: Make it a window manager)
             std::unique_ptr<Rice::Window> m_Window = nullptr;

@@ -1,25 +1,35 @@
-#include "inputManager.hpp"
+#include "input.hpp"
+#include "SDL3/SDL_mouse.h"
 
-namespace RICE_INTERNAL {
+namespace Rice {
 
-    InputManager::InputManager()
+    bool Input::m_CurrentKeys[SDL_SCANCODE_COUNT]{};
+    bool Input::m_PreviousKeys[SDL_SCANCODE_COUNT]{};
+
+    bool Input::m_CurrentMouse[3]{};
+    bool Input::m_PreviousMouse[3]{};
+
+    float Input::m_MouseX = 0.0f;
+    float Input::m_MouseY = 0.0f;
+
+    float Input::m_PreviousMouseX = 0.0f;
+    float Input::m_PreviousMouseY = 0.0f;
+
+    float Input::m_MouseDeltaX = 0.0f;
+    float Input::m_MouseDeltaY = 0.0f;
+
+    float Input::m_MouseScrollX = 0.0f;
+    float Input::m_MouseScrollY = 0.0f;
+
+    void Input::BeginFrame()
     {
-        update();
-    }
-
-    void InputManager::update()
-    {
-        /*
-        * Save previous keyboard state.
-        */
+        // Save previous keyboard state.
         for (int i = 0; i < SDL_SCANCODE_COUNT; ++i)
         {
             m_PreviousKeys[i] = m_CurrentKeys[i];
         }
 
-        /*
-        * SDL maintains the current keyboard state for us.
-        */
+        // SDL maintains the current keyboard state for us.
         const bool* keyboard =
             SDL_GetKeyboardState(nullptr);
 
@@ -28,9 +38,7 @@ namespace RICE_INTERNAL {
             m_CurrentKeys[i] = keyboard[i];
         }
 
-        /*
-        * Save previous mouse state.
-        */
+        // Save previous mouse state.
         for (int i = 0; i < 3; ++i)
         {
             m_PreviousMouse[i] = m_CurrentMouse[i];
@@ -39,9 +47,7 @@ namespace RICE_INTERNAL {
         m_PreviousMouseX = m_MouseX;
         m_PreviousMouseY = m_MouseY;
 
-        /*
-        * Get current mouse state.
-        */
+        // Get current mouse state.
         float x = 0.0f;
         float y = 0.0f;
 
@@ -60,24 +66,27 @@ namespace RICE_INTERNAL {
         m_CurrentMouse[2] =
             (buttons & SDL_BUTTON_RMASK) != 0;
 
-        /*
-        * Mouse movement since the previous frame.
-        */
+        
+        // Mouse movement since the previous frame.
         m_MouseDeltaX =
             m_MouseX - m_PreviousMouseX;
 
         m_MouseDeltaY =
             m_MouseY - m_PreviousMouseY;
+        
+        // Reset mouse scroll
+        m_MouseScrollX = 0.0f;
+        m_MouseScrollY = 0.0f;
     }
 
-    bool InputManager::isKeyDown(Rice::Key key) const
+    bool Input::IsKeyDown(Rice::Key key)
     {
         const SDL_Scancode scancode = toSDL(key);
 
         return m_CurrentKeys[scancode];
     }
 
-    bool InputManager::isKeyPressed(Rice::Key key) const
+    bool Input::IsKeyPressed(Rice::Key key)
     {
         const SDL_Scancode scancode = toSDL(key);
 
@@ -86,7 +95,7 @@ namespace RICE_INTERNAL {
             !m_PreviousKeys[scancode];
     }
 
-    bool InputManager::isKeyReleased(Rice::Key key) const
+    bool Input::IsKeyReleased(Rice::Key key)
     {
         const SDL_Scancode scancode = toSDL(key);
 
@@ -95,17 +104,16 @@ namespace RICE_INTERNAL {
             m_PreviousKeys[scancode];
     }
 
-    bool InputManager::isMouseButtonDown(
+    bool Input::IsMouseButtonDown(
         Rice::MouseButton button
-    ) const
+    )
     {
         return m_CurrentMouse[mouseIndex(button)];
     }
 
-    bool InputManager::isMouseButtonPressed(
+    bool Input::IsMouseButtonPressed(
         Rice::MouseButton button
-    ) const
-    {
+    ) {
         const int index = mouseIndex(button);
 
         return
@@ -113,10 +121,9 @@ namespace RICE_INTERNAL {
             !m_PreviousMouse[index];
     }
 
-    bool InputManager::isMouseButtonReleased(
+    bool Input::IsMouseButtonReleased(
         Rice::MouseButton button
-    ) const
-    {
+    ) {
         const int index = mouseIndex(button);
 
         return
@@ -124,27 +131,27 @@ namespace RICE_INTERNAL {
             m_PreviousMouse[index];
     }
 
-    float InputManager::mouseX() const
+    float Input::MouseX()
     {
         return m_MouseX;
     }
 
-    float InputManager::mouseY() const
+    float Input::MouseY()
     {
         return m_MouseY;
     }
 
-    float InputManager::mouseDeltaX() const
+    float Input::MouseDeltaX()
     {
         return m_MouseDeltaX;
     }
 
-    float InputManager::mouseDeltaY() const
+    float Input::MouseDeltaY()
     {
         return m_MouseDeltaY;
     }
 
-    int InputManager::mouseIndex(Rice::MouseButton button)
+    int Input::mouseIndex(Rice::MouseButton button)
     {
         switch (button)
         {
@@ -161,7 +168,17 @@ namespace RICE_INTERNAL {
         return 0;
     }
 
-    SDL_Scancode InputManager::toSDL(Rice::Key key)
+    float Input::MouseScrollX()
+    {
+        return m_MouseScrollX;
+    }
+
+    float Input::MouseScrollY()
+    {
+        return m_MouseScrollY;
+    }
+
+    SDL_Scancode Input::toSDL(Rice::Key key)
     {
         switch (key)
         {
@@ -230,4 +247,4 @@ namespace RICE_INTERNAL {
         }
     }
 
-} // namespace Engine
+}

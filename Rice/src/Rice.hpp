@@ -10,6 +10,7 @@
 #include "Rice/renderer/vertexBuffer.hpp"
 #include "Rice/renderer/indexBuffer.hpp"
 #include "Rice/renderer/shader.hpp"
+#include "Rice/input/input.hpp"
 
 
 
