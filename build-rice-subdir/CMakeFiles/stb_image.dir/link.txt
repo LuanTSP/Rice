@@ -1,1 +1,0 @@
-/usr/bin/c++ -fPIC -shared -Wl,--dependency-file=CMakeFiles/stb_image.dir/link.d -Wl,-soname,libstb_image.so -o libstb_image.so CMakeFiles/stb_image.dir/home/luantsp/Dev/Main_Projects/Rice/vendor/stb/stb_image.cpp.o
