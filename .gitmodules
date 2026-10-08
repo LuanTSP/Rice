@@ -13,3 +13,9 @@
 [submodule "vendor/glm"]
 	path = vendor/glm
 	url = https://github.com/g-truc/glm.git
+[submodule "vendor/stb_image"]
+	path = vendor/stb_image
+	url = https://github.com/nothings/stb.git
+[submodule "vendor/stb"]
+	path = vendor/stb
+	url = https://github.com/nothings/stb.git

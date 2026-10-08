@@ -20,6 +20,13 @@ add_subdirectory(vendor/glm)
 add_library(glad SHARED vendor/glad/src/glad.c)
 target_include_directories(glad PUBLIC vendor/glad/include)
 
+# Build stb_image
+add_library(stb_image SHARED vendor/stb/stb_image.cpp)
+target_include_directories(stb_image PUBLIC 
+    ${CMAKE_CURRENT_SOURCE_DIR}/vendor/stb
+)
+
+
 # build Rice engine
 add_subdirectory(Rice)
 

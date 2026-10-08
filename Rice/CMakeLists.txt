@@ -26,6 +26,7 @@ add_library(rice SHARED
     src/Rice/renderer/opengl/glVertexArray.cpp
     src/Rice/renderer/opengl/glVertexBuffer.cpp
     src/Rice/renderer/opengl/glWindow.cpp
+    src/Rice/renderer/opengl/glTexture2D.cpp
     
     # Renderer
     src/Rice/renderer/indexBuffer.cpp
@@ -34,6 +35,7 @@ add_library(rice SHARED
     src/Rice/renderer/vertexBuffer.cpp
     src/Rice/renderer/orthoCamera.cpp
     src/Rice/renderer/shader.cpp
+    src/Rice/renderer/texture.cpp
 
 )
 
@@ -52,4 +54,5 @@ target_link_libraries(rice
         SDL3::SDL3
         glad
         glm::glm
+        stb_image
 )

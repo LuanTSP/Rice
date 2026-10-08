@@ -1,0 +1,1 @@
+/usr/bin/cc -fPIC -shared -Wl,--dependency-file=CMakeFiles/glad.dir/link.d -Wl,-soname,libglad.so -o libglad.so CMakeFiles/glad.dir/home/luantsp/Dev/Main_Projects/Rice/vendor/glad/src/glad.c.o

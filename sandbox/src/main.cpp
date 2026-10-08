@@ -1,7 +1,7 @@
 #include "Rice/core/log.hpp"
 #include "Rice/input/input.hpp"
+#include "Rice/renderer/texture.hpp"
 #include <Rice.hpp>
-#include <cstdlib>
 #include <glm/geometric.hpp>
 #include <glm/trigonometric.hpp>
 #include <glm/ext/vector_float3.hpp>
@@ -44,15 +44,15 @@ public:
         const std::string secondVertexShader = R"(
             #version 460 core
             layout (location = 0) in vec3 aPos;
-            layout (location = 1) in vec4 aColor;
+            layout (location = 1) in vec2 aTexCoord;
             uniform mat4 u_View;
             uniform mat4 u_Proj;
 
-            out vec4 v_Color;
+            out vec2 v_TexCoord;
 
             void main()
             {
-                v_Color = vec4(aColor.bgr, aColor.a);
+                v_TexCoord = aTexCoord;
                 gl_Position = u_Proj * u_View * vec4(aPos.x + 0.55, aPos.y, aPos.z, 1.0);
             }
         )";
@@ -60,12 +60,14 @@ public:
         const std::string secondFragmentShader = R"(
             #version 460 core
 
-            in vec4 v_Color;
+            in vec2 v_TexCoord;
             out vec4 FragColor;
+
+            uniform sampler2D u_Texture;
 
             void main()
             {
-                FragColor = vec4(v_Color.rgb * vec3(1.0, 0.55, 0.25), v_Color.a);
+                FragColor = texture(u_Texture, v_TexCoord);
             }
         )";
 
@@ -78,10 +80,10 @@ public:
 
         std::uint32_t secondIndices[] = {0, 1, 2, 2, 3, 0};
         float secondVertices[] = {
-            -0.30f, -0.30f, 0.0f, 1.0f, 0.2f, 0.1f, 1.0f,
-            0.30f, -0.30f, 0.0f, 0.1f, 1.0f, 0.2f, 1.0f,
-            0.30f, 0.30f, 0.0f, 0.1f, 0.2f, 1.0f, 1.0f,
-            -0.30f, 0.30f, 0.0f, 1.0f, 0.8f, 0.1f, 1.0f
+            -0.30f, -0.30f, 0.0f, 0.0f, 0.0f,
+            0.30f, -0.30f, 0.0f, 1.0f, 0.0f,
+            0.30f, 0.30f, 0.0f, 1.0f, 1.0f,
+            -0.30f, 0.30f, 0.0f, 0.0f, 1.0f
         };
 
         std::shared_ptr<Rice::VertexBuffer> vertexBuffer1(Rice::VertexBuffer::Create(
@@ -98,15 +100,15 @@ public:
             sizeof(secondVertices), 
             {
                 { Rice::ShaderDataType::Float3, "aPos" },
-                { Rice::ShaderDataType::Float4, "aColor" }
+                { Rice::ShaderDataType::Float2, "aTexCoord" }
             }
         ));
 
         const std::shared_ptr<Rice::IndexBuffer> indexBuffer1(Rice::IndexBuffer::Create(firstIndices, sizeof(firstIndices)));
         const std::shared_ptr<Rice::IndexBuffer> indexBuffer2(Rice::IndexBuffer::Create(secondIndices, sizeof(secondIndices)));
 
-        m_Shader1.reset(Rice::Shader::Create(firstVertexShader, firstFragmentShader));
-        m_Shader2.reset(Rice::Shader::Create(secondVertexShader, secondFragmentShader));
+        m_NormalShader.reset(Rice::Shader::Create(firstVertexShader, firstFragmentShader));
+        m_TextureShader.reset(Rice::Shader::Create(secondVertexShader, secondFragmentShader));
 
         m_VertexArray1.reset(Rice::VertexArray::Create());
         m_VertexArray2.reset(Rice::VertexArray::Create());
@@ -116,6 +118,8 @@ public:
 
         m_VertexArray1->SetIndexBuffer(indexBuffer1);
         m_VertexArray2->SetIndexBuffer(indexBuffer2);
+
+        m_Texture.reset(Rice::Texture2D::Create("/home/luantsp/Dev/Main_Projects/Rice/sandbox/src/textures/square.png"));
 
         m_Camera = std::make_shared<Rice::OrthoCamera>(-1.0f, 1.0f, -1.0f, 1.0f, -100.0f, 100.0f);
         m_Camera->SetRotation(0.0f);
@@ -173,15 +177,18 @@ public:
         Rice::Renderer::SetClearColor(clearColor);
         Rice::Renderer::Clear();
         
-        Rice::Renderer::Submit(m_VertexArray1, m_Shader1);            
-        Rice::Renderer::Submit(m_VertexArray2, m_Shader2);
+        Rice::Renderer::Submit(m_VertexArray1, m_NormalShader);            
+
+        m_Texture->Bind();
+        Rice::Renderer::Submit(m_VertexArray2, m_TextureShader);
 
         Rice::Renderer::EndScene();
         Rice::Renderer::EndScene();
     }
 private:
-    std::shared_ptr<Rice::Shader> m_Shader1;
-    std::shared_ptr<Rice::Shader> m_Shader2;
+    std::shared_ptr<Rice::Shader> m_NormalShader;
+    std::shared_ptr<Rice::Shader> m_TextureShader;
+    std::shared_ptr<Rice::Texture> m_Texture;
     std::shared_ptr<Rice::VertexArray> m_VertexArray1;
     std::shared_ptr<Rice::VertexArray> m_VertexArray2;
     std::shared_ptr<Rice::OrthoCamera> m_Camera;
