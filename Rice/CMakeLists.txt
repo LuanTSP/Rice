@@ -7,7 +7,7 @@ add_library(rice SHARED
     src/Rice/core/log.cpp
 
     # Event
-    src/Rice/event/eventManager.cpp
+    src/Rice/event/event.cpp
     
     # Input
     src/Rice/input/input.cpp

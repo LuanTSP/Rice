@@ -1,5 +1,8 @@
+#include "Rice/event/event.hpp"
 #include "Rice/input/input.hpp"
 #include <Rice.hpp>
+#include <cstdlib>
+#include <glm/common.hpp>
 #include <glm/ext/vector_float3.hpp>
 #include <memory>
 
@@ -142,6 +145,12 @@ public:
             m_CameraPosition.x += m_CameraSpeed;
             m_Camera->SetPosition(m_CameraPosition);
         }
+        if (Rice::Input::MouseScrollY() != 0.0f)
+        {
+            auto sign = std::abs(Rice::Input::MouseScrollY()) / Rice::Input::MouseScrollY(); 
+            m_CameraRotation -= sign * m_CameraRotationSpeed;
+            m_Camera->SetRotation(m_CameraRotation);
+        }
         
 
         // Draw to screen
@@ -167,6 +176,8 @@ private:
 
     glm::vec3 m_CameraPosition = glm::vec3(0.0f, 0.0f, 0.0f);
     float m_CameraSpeed = 0.02f;
+    float m_CameraRotation = 0.0f;
+    float m_CameraRotationSpeed = 0.1f;
 };
 
 int main()

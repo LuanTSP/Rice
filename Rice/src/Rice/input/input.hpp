@@ -2,8 +2,13 @@
 
 #include <SDL3/SDL.h>
 
-namespace Rice {
+namespace Rice
+{
+    class Event;
+}
 
+namespace Rice
+{
     enum class Key
     {
         Unknown,
@@ -32,53 +37,83 @@ namespace Rice {
         Middle,
         Right
     };
-}
-
-namespace Rice {
 
     class Input
     {
-        public:
-            static void BeginFrame();
+    public:
+        static void BeginFrame();
 
-            static bool IsKeyDown(Rice::Key key);
-            static bool IsKeyPressed(Rice::Key key);
-            static bool IsKeyReleased(Rice::Key key);
+        static bool IsKeyDown(Key key);
+        static bool IsKeyPressed(Key key);
+        static bool IsKeyReleased(Key key);
 
-            static bool IsMouseButtonDown(Rice::MouseButton button);
-            static bool IsMouseButtonPressed(Rice::MouseButton button);
-            static bool IsMouseButtonReleased(Rice::MouseButton button);
+        static bool IsMouseButtonDown(MouseButton button);
+        static bool IsMouseButtonPressed(MouseButton button);
+        static bool IsMouseButtonReleased(MouseButton button);
 
-            static float MouseX();
-            static float MouseY();
+        static float MouseX();
+        static float MouseY();
 
-            static float MouseDeltaX();
-            static float MouseDeltaY();
+        static float MouseDeltaX();
+        static float MouseDeltaY();
 
-            static float MouseScrollX();
-            static float MouseScrollY();
+        static float MouseScrollX();
+        static float MouseScrollY();
 
-        private:
-            static SDL_Scancode toSDL(Rice::Key key);
-            static int mouseIndex(Rice::MouseButton button);
+    private:
+        friend class Rice::Event;
 
-            static bool m_CurrentKeys[SDL_SCANCODE_COUNT];
-            static bool m_PreviousKeys[SDL_SCANCODE_COUNT];
+        static void OnKeyPressed(
+            SDL_Scancode key
+        );
 
-            static bool m_CurrentMouse[3];
-            static bool m_PreviousMouse[3];
+        static void OnKeyReleased(
+            SDL_Scancode key
+        );
 
-            static float m_MouseX;
-            static float m_MouseY;
+        static void OnMouseMoved(
+            float x,
+            float y,
+            float deltaX,
+            float deltaY
+        );
 
-            static float m_PreviousMouseX;
-            static float m_PreviousMouseY;
+        static void OnMouseButtonPressed(
+            Uint8 button
+        );
 
-            static float m_MouseDeltaX;
-            static float m_MouseDeltaY;
+        static void OnMouseButtonReleased(
+            Uint8 button
+        );
 
-            static float m_MouseScrollX;
-            static float m_MouseScrollY;
+        static void OnMouseWheel(
+            float x,
+            float y
+        );
+
+        static SDL_Scancode toSDL(Key key);
+
+        static int mouseIndex(
+            MouseButton button
+        );
+
+        static int mouseIndex(
+            Uint8 button
+        );
+
+        static bool m_CurrentKeys[SDL_SCANCODE_COUNT];
+        static bool m_PreviousKeys[SDL_SCANCODE_COUNT];
+
+        static bool m_CurrentMouse[3];
+        static bool m_PreviousMouse[3];
+
+        static float m_MouseX;
+        static float m_MouseY;
+
+        static float m_MouseDeltaX;
+        static float m_MouseDeltaY;
+
+        static float m_MouseScrollX;
+        static float m_MouseScrollY;
     };
-
 }
