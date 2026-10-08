@@ -1,14 +1,9 @@
 #include "application.hpp"
 #include "Rice/event/eventManager.hpp"
 #include "Rice/input/inputManager.hpp"
-#include "Rice/renderer/indexBuffer.hpp"
-#include "Rice/renderer/opengl/glShader.hpp"
 #include "Rice/renderer/opengl/glWindow.hpp"
 #include "Rice/event/events.hpp"
-#include "Rice/renderer/vertexArray.hpp"
 #include "Rice/renderer/renderer.hpp"
-#include "Rice/renderer/vertexBuffer.hpp"
-#include "glm/ext/vector_float4.hpp"
 #include "log.hpp"
 
 #include <memory>
@@ -41,143 +36,23 @@ namespace Rice
         {
             Quit();
         });
-
-        const std::string firstVertexShader = R"(
-            #version 460 core
-            layout (location = 0) in vec3 aPos;
-            layout (location = 1) in vec4 aColor;
-            uniform mat4 u_View;
-            uniform mat4 u_Proj;
-
-            out vec4 v_Color;
-
-            void main()
-            {
-                v_Color = aColor;
-                gl_Position = u_Proj * u_View * vec4(aPos, 1.0);
-            }
-        )";
-
-        const std::string firstFragmentShader = R"(
-            #version 460 core
-
-            in vec4 v_Color;
-            out vec4 FragColor;
-
-            void main()
-            {
-                FragColor = v_Color;
-            }
-        )";
-
-        const std::string secondVertexShader = R"(
-            #version 460 core
-            layout (location = 0) in vec3 aPos;
-            layout (location = 1) in vec4 aColor;
-            uniform mat4 u_View;
-            uniform mat4 u_Proj;
-
-            out vec4 v_Color;
-
-            void main()
-            {
-                v_Color = vec4(aColor.bgr, aColor.a);
-                gl_Position = u_Proj * u_View * vec4(aPos.x + 0.55, aPos.y, aPos.z, 1.0);
-            }
-        )";
-
-        const std::string secondFragmentShader = R"(
-            #version 460 core
-
-            in vec4 v_Color;
-            out vec4 FragColor;
-
-            void main()
-            {
-                FragColor = vec4(v_Color.rgb * vec3(1.0, 0.55, 0.25), v_Color.a);
-            }
-        )";
-
-        std::uint32_t firstIndices[] = {0, 1, 2};
-        float firstVertices[] = {
-            -0.90f, -0.55f, 0.0f, 1.0f, 0.1f, 0.1f, 1.0f,
-            -0.15f, -0.55f, 0.0f, 0.1f, 1.0f, 0.1f, 1.0f,
-            -0.525f, 0.50f, 0.0f, 0.1f, 0.2f, 1.0f, 1.0f
-        };
-
-        std::uint32_t secondIndices[] = {0, 1, 2, 2, 3, 0};
-        float secondVertices[] = {
-            -0.30f, -0.30f, 0.0f, 1.0f, 0.2f, 0.1f, 1.0f,
-            0.30f, -0.30f, 0.0f, 0.1f, 1.0f, 0.2f, 1.0f,
-            0.30f, 0.30f, 0.0f, 0.1f, 0.2f, 1.0f, 1.0f,
-            -0.30f, 0.30f, 0.0f, 1.0f, 0.8f, 0.1f, 1.0f
-        };
-
-        std::shared_ptr<VertexBuffer> vertexBuffer1(Rice::VertexBuffer::Create(
-            firstVertices, 
-            sizeof(firstVertices), 
-            {
-                { Rice::ShaderDataType::Float3, "aPos" },
-                { Rice::ShaderDataType::Float4, "aColor" }
-            }
-        ));
-
-        std::shared_ptr<VertexBuffer> vertexBuffer2(Rice::VertexBuffer::Create(
-            secondVertices, 
-            sizeof(secondVertices), 
-            {
-                { Rice::ShaderDataType::Float3, "aPos" },
-                { Rice::ShaderDataType::Float4, "aColor" }
-            }
-        ));
-
-        const std::shared_ptr<IndexBuffer> indexBuffer1(Rice::IndexBuffer::Create(firstIndices, sizeof(firstIndices)));
-        const std::shared_ptr<IndexBuffer> indexBuffer2(Rice::IndexBuffer::Create(secondIndices, sizeof(secondIndices)));
-
-        m_Shader1 = std::make_shared<RICE_INTERNAL::GLShader>(firstVertexShader, firstFragmentShader);
-        m_Shader2 = std::make_shared<RICE_INTERNAL::GLShader>(secondVertexShader, secondFragmentShader);
-
-        m_VertexArray1.reset(Rice::VertexArray::Create());
-        m_VertexArray2.reset(Rice::VertexArray::Create());
-
-        m_VertexArray1->AddVertexBuffer(vertexBuffer1);
-        m_VertexArray2->AddVertexBuffer(vertexBuffer2);
-
-        m_VertexArray1->SetIndexBuffer(indexBuffer1);
-        m_VertexArray2->SetIndexBuffer(indexBuffer2);
-
-        Log::Info("Application initialized");
     }
 
     void Application::Run()
     {
-        Log::Info("Runnig..."); // DEBUG
-
-        const auto camera = std::make_shared<OrthoCamera>(-1.0f, 1.0f, -1.0f, 1.0f);
-
         m_IsRunning = true;
         while (m_IsRunning)
         {
             m_Events->poll();
             m_Inputs->update();
 
-            auto clearColor = glm::vec4(0.1, 0.1, 0.1, 1.0f);
+            if (m_ActiveScene)
+            {
+                m_ActiveScene->onUpdate();
+            }
 
-            Renderer::BeginScene(camera);
-
-            Renderer::SetClearColor(clearColor);
-            Renderer::Clear();
-            
-            Renderer::Submit(m_VertexArray1, m_Shader1);            
-            Renderer::Submit(m_VertexArray2, m_Shader2);
-
-            Renderer::EndScene();
-            Renderer::EndScene();
-            
             m_Window->SwapBuffers();
         }
-
-        Log::Info("Application ended.");
     }
 
     void Application::Quit()

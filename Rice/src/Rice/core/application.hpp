@@ -2,10 +2,10 @@
 
 #include "Rice/input/inputManager.hpp"
 #include "Rice/event/eventManager.hpp"
-#include "Rice/renderer/vertexArray.hpp"
 #include "Rice/renderer/window.hpp"
+#include "Rice/scene/scene.hpp"
 
-#include "Rice/renderer/opengl/glShader.hpp"
+#include <type_traits>
 #include <memory>
 
 namespace Rice
@@ -18,6 +18,21 @@ namespace Rice
             ~Application() = default;
 
             void Run();
+
+            template<typename T, typename ...Args>
+            void SetScene(Args&&... args)
+            {
+                static_assert(
+                    std::is_base_of<Rice::Scene, T>::value,
+                    "T must inheric from Rice::Scene base class"
+                );
+
+                m_ActiveScene = std::make_unique<T>(
+                    std::forward<Args>(args)...
+                );
+
+                m_ActiveScene->onLoad();
+            }
             
         private:
             // Managers
@@ -27,17 +42,12 @@ namespace Rice
             // Window (TODO:: Make it a window manager)
             std::unique_ptr<Rice::Window> m_Window = nullptr;
 
-            
-            std::shared_ptr<RICE_INTERNAL::GLShader> m_Shader1;
-            std::shared_ptr<RICE_INTERNAL::GLShader> m_Shader2;
-
-            std::shared_ptr<VertexArray> m_VertexArray1;
-            std::shared_ptr<VertexArray> m_VertexArray2;
-
             // Private variables
             bool m_IsRunning = false;
 
-            // Private functions
+            // Scenes
+            std::unique_ptr<Rice::Scene> m_ActiveScene = nullptr;
+        private:
             void Quit();
     };
 

@@ -1,4 +1,4 @@
-#include "../core/application.hpp"
+#pragma once
 
 namespace Rice
 {
@@ -11,7 +11,7 @@ namespace Rice
 
             // Function called automatically every frame
             // @param dt: float (delta time between frames in secons)
-            virtual void onUpdate(float dt) = 0;
+            virtual void onUpdate() = 0;
         private:
     };
 }

@@ -7,9 +7,9 @@
 #include "glm/ext/matrix_transform.hpp"
 
 namespace Rice {
-    OrthoCamera::OrthoCamera(const float left, const float right, const float bottom, const float top) {
+    OrthoCamera::OrthoCamera(const float left, const float right, const float bottom, const float top, const float near,const float far) {
         // Initialize projection matrix
-        m_Projection = glm::ortho(left, right, bottom, top);
+        m_Projection = glm::ortho(left, right, bottom, top, near, far);
 
         // Initialize positon and angle of rotation
         m_Position = glm::vec3(0.0f, 0.0f, 0.0f);

@@ -14,7 +14,6 @@ add_library(rice SHARED
     
     
     # Scene
-    src/Rice/scene/scene.cpp
     src/Rice/scene/sceneManager.cpp
 
     # Renderer opengl
@@ -32,6 +31,8 @@ add_library(rice SHARED
     src/Rice/renderer/vertexArray.cpp
     src/Rice/renderer/vertexBuffer.cpp
     src/Rice/renderer/orthoCamera.cpp
+    src/Rice/renderer/shader.cpp
+
 )
 
 target_precompile_headers(rice

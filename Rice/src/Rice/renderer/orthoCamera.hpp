@@ -5,8 +5,8 @@
 namespace Rice {
     class OrthoCamera {
     public:
-        OrthoCamera(const float left, const float right, const float bottom, const float top);
-        
+        OrthoCamera(const float left, const float right, const float bottom, const float top, const float near, const float far);
+
         void        SetPosition(const glm::vec3& position) { m_Position = position; }
         void        SetRotation(const float rotation)      { m_Rotation = rotation; }
         glm::vec3   GetPosition()   const { return m_Position; }
