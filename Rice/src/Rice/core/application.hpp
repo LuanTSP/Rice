@@ -5,9 +5,7 @@
 #include "Rice/renderer/vertexArray.hpp"
 #include "Rice/renderer/window.hpp"
 
-#include "Rice/renderer/indexBuffer.hpp"
 #include "Rice/renderer/opengl/glShader.hpp"
-#include "Rice/renderer/vertexBuffer.hpp"
 #include <memory>
 
 namespace Rice
@@ -32,12 +30,6 @@ namespace Rice
             
             std::shared_ptr<RICE_INTERNAL::GLShader> m_Shader1;
             std::shared_ptr<RICE_INTERNAL::GLShader> m_Shader2;
-
-            std::shared_ptr<VertexBuffer> m_VertexBuffer1;
-            std::shared_ptr<VertexBuffer> m_VertexBuffer2;
-
-            std::shared_ptr<IndexBuffer> m_IndexBuffer1;
-            std::shared_ptr<IndexBuffer> m_IndexBuffer2;
 
             std::shared_ptr<VertexArray> m_VertexArray1;
             std::shared_ptr<VertexArray> m_VertexArray2;

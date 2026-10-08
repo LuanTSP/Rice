@@ -36,7 +36,7 @@ namespace Rice
         m_Inputs = std::make_unique<RICE_INTERNAL::InputManager>();
         m_Events = std::make_unique<RICE_INTERNAL::EventManager>();
 
-        // 3.1 Substribe to Quit event (not a must but is good)
+        // 3.1 Subscribe to Quit event (not a must but is good)
         m_Events->subscribe<QuitEvent>([this](const QuitEvent)
         {
             Quit();
@@ -46,13 +46,15 @@ namespace Rice
             #version 460 core
             layout (location = 0) in vec3 aPos;
             layout (location = 1) in vec4 aColor;
+            uniform mat4 u_View;
+            uniform mat4 u_Proj;
 
             out vec4 v_Color;
 
             void main()
             {
                 v_Color = aColor;
-                gl_Position = vec4(aPos, 1.0);
+                gl_Position = u_Proj * u_View * vec4(aPos, 1.0);
             }
         )";
 
@@ -72,13 +74,15 @@ namespace Rice
             #version 460 core
             layout (location = 0) in vec3 aPos;
             layout (location = 1) in vec4 aColor;
+            uniform mat4 u_View;
+            uniform mat4 u_Proj;
 
             out vec4 v_Color;
 
             void main()
             {
                 v_Color = vec4(aColor.bgr, aColor.a);
-                gl_Position = vec4(aPos.x + 0.55, aPos.y, aPos.z, 1.0);
+                gl_Position = u_Proj * u_View * vec4(aPos.x + 0.55, aPos.y, aPos.z, 1.0);
             }
         )";
 
@@ -109,7 +113,7 @@ namespace Rice
             -0.30f, 0.30f, 0.0f, 1.0f, 0.8f, 0.1f, 1.0f
         };
 
-        m_VertexBuffer1.reset(Rice::VertexBuffer::Create(
+        std::shared_ptr<VertexBuffer> vertexBuffer1(Rice::VertexBuffer::Create(
             firstVertices, 
             sizeof(firstVertices), 
             {
@@ -118,7 +122,7 @@ namespace Rice
             }
         ));
 
-        m_VertexBuffer2.reset(Rice::VertexBuffer::Create(
+        std::shared_ptr<VertexBuffer> vertexBuffer2(Rice::VertexBuffer::Create(
             secondVertices, 
             sizeof(secondVertices), 
             {
@@ -127,8 +131,8 @@ namespace Rice
             }
         ));
 
-        m_IndexBuffer1.reset(Rice::IndexBuffer::Create(firstIndices, sizeof(firstIndices)));
-        m_IndexBuffer2.reset(Rice::IndexBuffer::Create(secondIndices, sizeof(secondIndices)));
+        const std::shared_ptr<IndexBuffer> indexBuffer1(Rice::IndexBuffer::Create(firstIndices, sizeof(firstIndices)));
+        const std::shared_ptr<IndexBuffer> indexBuffer2(Rice::IndexBuffer::Create(secondIndices, sizeof(secondIndices)));
 
         m_Shader1 = std::make_shared<RICE_INTERNAL::GLShader>(firstVertexShader, firstFragmentShader);
         m_Shader2 = std::make_shared<RICE_INTERNAL::GLShader>(secondVertexShader, secondFragmentShader);
@@ -136,11 +140,11 @@ namespace Rice
         m_VertexArray1.reset(Rice::VertexArray::Create());
         m_VertexArray2.reset(Rice::VertexArray::Create());
 
-        m_VertexArray1->AddVertexBuffer(m_VertexBuffer1);
-        m_VertexArray2->AddVertexBuffer(m_VertexBuffer2);
+        m_VertexArray1->AddVertexBuffer(vertexBuffer1);
+        m_VertexArray2->AddVertexBuffer(vertexBuffer2);
 
-        m_VertexArray1->SetIndexBuffer(m_IndexBuffer1);
-        m_VertexArray2->SetIndexBuffer(m_IndexBuffer2);
+        m_VertexArray1->SetIndexBuffer(indexBuffer1);
+        m_VertexArray2->SetIndexBuffer(indexBuffer2);
 
         Log::Info("Application initialized");
     }
@@ -148,6 +152,8 @@ namespace Rice
     void Application::Run()
     {
         Log::Info("Runnig..."); // DEBUG
+
+        const auto camera = std::make_shared<OrthoCamera>(-1.0f, 1.0f, -1.0f, 1.0f);
 
         m_IsRunning = true;
         while (m_IsRunning)
@@ -157,18 +163,17 @@ namespace Rice
 
             auto clearColor = glm::vec4(0.1, 0.1, 0.1, 1.0f);
 
+            Renderer::BeginScene(camera);
+
             Renderer::SetClearColor(clearColor);
             Renderer::Clear();
             
-            // Draw
-            m_Shader1->Bind();
-            Renderer::Submit(m_VertexArray1);
-            
-            m_Shader2->Bind();
-            Renderer::Submit(m_VertexArray2);
+            Renderer::Submit(m_VertexArray1, m_Shader1);            
+            Renderer::Submit(m_VertexArray2, m_Shader2);
 
             Renderer::EndScene();
-
+            Renderer::EndScene();
+            
             m_Window->SwapBuffers();
         }
 

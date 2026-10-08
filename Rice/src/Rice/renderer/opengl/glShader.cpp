@@ -1,6 +1,10 @@
 #include "glShader.hpp"
 #include "Rice/core/log.hpp"
+#include "glm/ext/matrix_float4x4.hpp"
+#include "glm/gtc/type_ptr.hpp"
+#include <GLES2/gl2.h>
 #include <glad/glad.h>
+#include <stdexcept>
 
 namespace RICE_INTERNAL
 {
@@ -113,10 +117,57 @@ namespace RICE_INTERNAL
             // In this simple program, we'll just leave
             return;
         }
+        // Load uniform locations
+        LoadUniformLocations();
 
         // Always detach shaders after a successful link.
         glDetachShader(m_ProgramID, vertexShader);
         glDetachShader(m_ProgramID, fragmentShader);
+
+    };
+
+    void GLShader::LoadUniformLocations()
+    {
+        GLint count = 0;
+        GLint maxNameLength = 0;
+
+        glGetProgramiv(
+            m_ProgramID,
+            GL_ACTIVE_UNIFORMS,
+            &count
+        );
+
+        glGetProgramiv(
+            m_ProgramID,
+            GL_ACTIVE_UNIFORM_MAX_LENGTH,
+            &maxNameLength
+        );
+
+        std::vector<GLchar> name(maxNameLength);
+
+        for (GLint i = 0; i < count; ++i)
+        {
+            GLsizei length = 0;
+            GLint size = 0;
+            GLenum type = 0;
+
+            glGetActiveUniform(
+                m_ProgramID,
+                i,
+                maxNameLength,
+                &length,
+                &size,
+                &type,
+                name.data()
+            );
+
+            std::string uniformName(name.data(), length);
+
+            GLint location =
+                glGetUniformLocation(m_ProgramID, uniformName.c_str());
+
+            m_Locations.emplace(uniformName, location);
+        }
     };
 
     GLShader::~GLShader()
@@ -132,5 +183,22 @@ namespace RICE_INTERNAL
     void GLShader::Unbind()
     {
         glUseProgram(0);
+    }
+
+    void GLShader::SetMat4(const std::string& name, const glm::mat4& matrix)
+    {
+        auto it = m_Locations.find(name);
+
+        // Check if location exist
+        if (it == m_Locations.end())
+        {
+            std::string msg = "Cannot find location with name: ";
+            msg += name;
+            Rice::Log::Error(msg);
+            throw std::runtime_error(msg);
+        }
+
+        // Send data to the GPU
+        glUniformMatrix4fv(it->second, 1, GL_FALSE, glm::value_ptr(matrix));
     }
 }

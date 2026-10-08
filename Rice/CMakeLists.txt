@@ -31,7 +31,7 @@ add_library(rice SHARED
     src/Rice/renderer/renderer.cpp
     src/Rice/renderer/vertexArray.cpp
     src/Rice/renderer/vertexBuffer.cpp
-
+    src/Rice/renderer/orthoCamera.cpp
 )
 
 target_precompile_headers(rice
