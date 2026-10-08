@@ -4,6 +4,7 @@
 #include "Rice/event/events.hpp"
 #include "Rice/event/event.hpp"
 #include "Rice/renderer/renderer.hpp"
+#include "Rice/time/time.hpp"
 #include "log.hpp"
 
 #include <memory>
@@ -40,6 +41,7 @@ namespace Rice
         m_IsRunning = true;
         while (m_IsRunning)
         {
+            Rice::Time::BeginFrame();
             Rice::Input::BeginFrame();
             Rice::Event::BeginFrame();
 

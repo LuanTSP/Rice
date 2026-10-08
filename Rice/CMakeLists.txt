@@ -11,7 +11,9 @@ add_library(rice SHARED
     
     # Input
     src/Rice/input/input.cpp
-    
+
+    # Time
+    src/Rice/time/time.cpp
     
     # Scene
     src/Rice/scene/sceneManager.cpp

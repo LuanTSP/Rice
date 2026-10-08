@@ -1,10 +1,12 @@
-#include "Rice/event/event.hpp"
+#include "Rice/core/log.hpp"
 #include "Rice/input/input.hpp"
 #include <Rice.hpp>
 #include <cstdlib>
-#include <glm/common.hpp>
+#include <glm/geometric.hpp>
+#include <glm/trigonometric.hpp>
 #include <glm/ext/vector_float3.hpp>
 #include <memory>
+#include <string>
 
 class ExampleScene : public Rice::Scene
 {
@@ -124,31 +126,41 @@ public:
 
     void onUpdate() override
     {
-        // Input
+        const float deltaTime = static_cast<float>(Rice::Time::DTSeconds());
+        glm::vec3 movement(0.0f);
+
         if (Rice::Input::IsKeyDown(Rice::Key::W))
-        {
-            m_CameraPosition.y += m_CameraSpeed;
-            m_Camera->SetPosition(m_CameraPosition);
-        }
+            movement.y += 1.0f;
         if (Rice::Input::IsKeyDown(Rice::Key::A))
-        {
-            m_CameraPosition.x -= m_CameraSpeed;
-            m_Camera->SetPosition(m_CameraPosition);
-        }
+            movement.x -= 1.0f;
         if (Rice::Input::IsKeyDown(Rice::Key::S))
-        {
-            m_CameraPosition.y -= m_CameraSpeed;
-            m_Camera->SetPosition(m_CameraPosition);
-        }
+            movement.y -= 1.0f;
         if (Rice::Input::IsKeyDown(Rice::Key::D))
+            movement.x += 1.0f;
+
+        if (glm::length(movement) > 0.0f)
         {
-            m_CameraPosition.x += m_CameraSpeed;
+            movement = glm::normalize(movement);
+            m_CameraPosition += movement * (m_CameraSpeedMetersPerSecond * deltaTime);
             m_Camera->SetPosition(m_CameraPosition);
         }
-        if (Rice::Input::MouseScrollY() != 0.0f)
+
+        std::string msg = "Frametime: ";
+        msg += std::to_string(Rice::Time::DTMilliseconds());
+        msg += "ms";
+        Rice::Log::Info(msg);
+
+        float rotationDeltaDegrees = 0.0f;
+        if (Rice::Input::IsKeyDown(Rice::Key::Q))
+            rotationDeltaDegrees += m_CameraRotationDegreesPerSecond * deltaTime;
+        if (Rice::Input::IsKeyDown(Rice::Key::E))
+            rotationDeltaDegrees -= m_CameraRotationDegreesPerSecond * deltaTime;
+
+        // Wheel input is a discrete step, so it uses degrees per scroll unit, not degrees per second.
+        rotationDeltaDegrees -= Rice::Input::MouseScrollY() * m_MouseWheelDegreesPerUnit;
+        if (rotationDeltaDegrees != 0.0f)
         {
-            auto sign = std::abs(Rice::Input::MouseScrollY()) / Rice::Input::MouseScrollY(); 
-            m_CameraRotation -= sign * m_CameraRotationSpeed;
+            m_CameraRotation += glm::radians(rotationDeltaDegrees);
             m_Camera->SetRotation(m_CameraRotation);
         }
         
@@ -175,9 +187,10 @@ private:
     std::shared_ptr<Rice::OrthoCamera> m_Camera;
 
     glm::vec3 m_CameraPosition = glm::vec3(0.0f, 0.0f, 0.0f);
-    float m_CameraSpeed = 0.02f;
+    float m_CameraSpeedMetersPerSecond = 5.0f;
     float m_CameraRotation = 0.0f;
-    float m_CameraRotationSpeed = 0.1f;
+    float m_CameraRotationDegreesPerSecond = 90.0f;
+    float m_MouseWheelDegreesPerUnit = 10.0f;
 };
 
 int main()
